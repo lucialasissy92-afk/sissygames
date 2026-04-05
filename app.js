@@ -547,4 +547,4 @@ var QUIZ_QUESTIONS = [
     { q: 'Il frenulo è:', o: ['La punta del pene','La banda di tessuto sotto il glande','La base del pene','Il rivestimento esterno'], a: 1, cat: '📏 Anatomia' },
     { q: 'Cosa significa "grower" vs "shower"?', o: ['Circonciso vs non','Piccolo flaccido ma cresce molto vs grande anche flaccido','Dritto vs curvo','Giovane vs anziano'], a: 1, cat: '📚 Terminologia' },
     { q: 'La zona più sensibile del pene è:', o: ['La base','Il corpo','Il frenulo e la corona del glande','I testicoli'], a: 2, cat: '🔬 Scienza' },
-    { q: 'Un pene può fratturarsi?', o: ['No, non
+    { q: 'Un pene può fratturarsi?', o: ['No, non ha ossa','Sì, si può rompere la tunica albuginea','Solo se non se ne prende cura la sissy','si bisogna aiutare i maschi a scopare le sissy/femmine in sicurezza}]
