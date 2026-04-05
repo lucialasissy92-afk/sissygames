@@ -1123,3 +1123,514 @@ setInterval(function() {
     profile.totalTime++;
     if (profile.totalTime % 60 === 0) DB.set('profile', profile);
 }, 1000);
+
+// ============ PENSA CON LA FICA ============
+var FICA_SCENARIOS = [
+    {
+        tag: '💔 Tradimento',
+        title: 'Il ragazzo della tua migliore amica',
+        situation: 'La tua migliore amica Sara ti ha chiesto di portare delle cose a casa sua. Suoni il campanello. Apre Marco, il suo ragazzo. 190cm, senza maglietta, addominali scolpiti che luccicano di sudore — stava facendo flessioni. Pantaloni della tuta grigi, portati bassi sui fianchi, il bordo dei boxer che spunta. Ti guarda dall\'alto in basso con un mezzo sorriso pigro. "Sara non c\'è... vuoi entrare ad aspettarla?" Si appoggia allo stipite della porta, il braccio alzato, e ti mostra involontariamente l\'ascella, il ciuffo di peli scuri, il profumo del suo sudore fresco che ti colpisce come uno schiaffo.',
+        alpha1: 'Marco, 27 anni. Corpo da palestra naturale — non gonfio, ma definito, ogni muscolo visibile sotto la pelle abbronzata. Mascella squadrata con una barba di tre giorni. Occhi marroni caldi con un\'espressione che dice "so che mi stai guardando". Mani grandi con le nocche un po\' rovinate — fa boxe. Quando parla la sua voce è bassa, calma, il tipo che non ha mai bisogno di alzare il tono.',
+        alpha2: 'Ti fa entrare e cammina davanti a te verso la cucina. I pantaloni della tuta sono sottili e aderenti. Vedi il contorno del suo culo, tondo e duro. Quando si gira per prenderti un bicchiere d\'acqua, noti il contorno di qualcosa nella parte anteriore della tuta. È rilassato, semi-morbido, eppure il profilo è inequivocabile — lungo, che pende verso sinistra. Si gratta distrattamente sopra la tuta parlando del più e del meno. Non si rende conto. O forse sì.',
+        alpha3: 'Si siede sul divano e le gambe aperte lasciano poco all\'immaginazione. Il tessuto sottile della tuta si tende tra le cosce. Puoi vedere chiaramente la sagoma del suo cazzo che riposa sulla coscia sinistra — deve essere almeno 17-18cm anche da morbido. La testa è definita sotto il tessuto, grossa, rotonda. I boxer non fanno nulla per contenerlo. Quando si stiracchia il corpo, i pantaloni scendono di un centimetro e vedi il V dei fianchi, la linea di peli scuri che scende sotto l\'elastico. L\'odore del suo sudore riempie il soggiorno. È un odore che ti fa stringere le gambe.',
+        tension: 'Si siede accanto a te sul divano. Vicino. La sua coscia tocca la tua. Non la sposta. "Sara torna tra un\'ora" dice, guardandoti negli occhi. Una pausa. "Sai... mi ha detto che tu la invidi." Un altro mezzo sorriso. La sua mano si appoggia sul divano dietro di te, non ti tocca, ma senti il calore del suo braccio. "Che cosa mi invidi esattamente?" Il suo sguardo scende sulla tua bocca per un secondo.',
+        choices: [
+            { text: '🧠 "Niente, devo andare. Dille che sono passata."', points: 1, type: 'testa' },
+            { text: '🤔 Resti seduta ma cambi discorso, parlando di Sara.', points: 2, type: 'esitante' },
+            { text: '💕 "Forse la invidio un po\'..." e lasci la frase a metà.', points: 3, type: 'emotiva' },
+            { text: '🔥 Appoggi la mano sulla sua coscia. "Invidio quello che ha ogni notte."', points: 4, type: 'fica' }
+        ],
+        consequences: [
+            'Ti alzi e te ne vai. Fuori piove. Cammini verso casa con il cuore che batte. Non riesci a toglierti dalla testa l\'immagine del suo cazzo nella tuta. Quella sera, nel letto, la mano scende tra le tue gambe e pensi solo a Marco. A come sarebbe stato se fossi rimasta. A quello che avresti potuto toccare. A come Sara non saprà mai quanto la invidi davvero.',
+            'Resti a parlare per venti minuti. Di Sara, del lavoro, di niente. Ma i tuoi occhi continuano a scendere. Lui lo nota. Quando ti alzi per andare, si alza anche lui e ti accompagna alla porta. Nello stretto corridoio i vostri corpi si sfiorano. Senti la sua erezione premere contro la tua coscia per un secondo. "Torna quando vuoi" dice. E sai che tornerai.',
+            'Lui sorride lentamente. "Un po\'? Solo un po\'?" Si avvicina. La sua mano ti prende il mento e ti alza il viso. "Dimmi cosa vuoi." La sua bocca è a due centimetri dalla tua. Senti il suo fiato caldo. "Non devi dirlo a Sara." Il suo pollice ti accarezza il labbro inferiore. Ti sciogli.',
+            'La tua mano si posa sulla sua coscia e senti il muscolo duro sotto il tessuto. Lui ti guarda sorpreso per un secondo, poi il suo sorriso si allarga. "Sapevo che eri così." La sua mano prende la tua e la guida più in alto, sul contorno del suo cazzo che sta crescendo sotto la tuta. Lo senti indurirsi sotto le tue dita. È grosso. Molto più grosso di quanto sembrasse. "Inginocchiati" ti dice con calma. E le tue ginocchia toccano il pavimento prima ancora che il tuo cervello processi le parole. Il pavimento di Sara. Il divano di Sara. Il cazzo di Sara. Ma ora è nella tua mano. E tra poco sarà nella tua bocca.'
+        ],
+        msg_fica: 'Sei stata brava oggi. Ho ancora il tuo sapore sulle labbra. Non dire niente a Sara. Domani sera lei lavora fino a tardi... 😏',
+        msg_testa: 'Peccato che sei scappata. Ho visto come mi guardavi. So che ci pensi adesso. Stai pensando al mio cazzo, vero? Sara non deve sapere niente...',
+        msg_responses: [
+            { text: '🧠 Non rispondo. Blocco il numero.', reply: null },
+            { text: '🤔 "Non dovremmo..."', reply: 'Ma vuoi. Lo sai. E lo so anch\'io. Ti mando l\'indirizzo. Domani alle 21. 🔥' },
+            { text: '💕 "Sara è la mia migliore amica..."', reply: 'E tu sei la migliore scopata che non ho ancora avuto. Pensa a quello che hai sentito oggi. Pensa a quello che sentirai domani. 💋' },
+            { text: '🔥 "A che ora vuoi che venga?"', reply: 'Alle 21. Porta qualcosa di carino. Anzi no. Non ti servirà. 🍆' }
+        ]
+    },
+    {
+        tag: '⚡ Rischio',
+        title: 'Il personal trainer a fine allenamento',
+        situation: 'Ultimo appuntamento della giornata in palestra. Le luci sono già mezze spente, tutti sono andati via. Il tuo trainer Karim ti sta facendo fare gli ultimi stretching. La musica è bassa, R&B. L\'aria sa di sudore e gomma. Sei stesa sul materassino e lui è in ginocchio accanto a te. "Alza la gamba" dice. La prende con le sue mani enormi e la porta verso il tuo petto. Il suo viso è sopra il tuo. I suoi occhi scuri ti fissano.',
+        alpha1: 'Karim, 31 anni, marocchino. 186cm di muscoli densi e funzionali — non da bodybuilder, da lottatore. Pelle color caramello, testa rasata, barba curata cortissima. Braccia che sembrano scolpite nel legno d\'ulivo, vene che scorrono sugli avambracci. Canottiera nera attillata che mostra ogni singola fibra del petto. Odora di sudore pulito e legno di sandalo.',
+        alpha2: 'Quando si muove intorno a te per correggerti la postura, noti come i suoi pantaloncini corti si tendono sulle cosce. Sono cosce enormi, potenti. La canottiera si alza quando solleva le braccia e vedi gli addominali — otto quadrati perfetti e quella V affilata che punta verso il basso. Porta boxer compression sotto i pantaloncini, e il tessuto aderente non nasconde nulla. C\'è un rigonfiamento consistente tra le cosce, pesante, che si muove quando cammina.',
+        alpha3: 'Mentre ti tiene la gamba in alto, la sua posizione fa sì che il suo bacino sia vicino alla tua coscia. Attraverso il tessuto sottile dei pantaloncini e dei compression, senti — e vedi — chiaramente il suo cazzo. È spesso. Anche da morbido ha una presenza pesante, massiccia. La testa è larga e definita sotto il tessuto. Quando si sporge per correggerti la schiena, il suo cazzo preme contro la tua coscia e senti il calore attraverso i vestiti. Lui non si scusa. Anzi, preme un po\' di più. I suoi occhi ti sfidano a dire qualcosa. L\'odore del suo sudore da questa distanza è inebriante — muschiato, animalesco, dominante.',
+        tension: 'Ti preme le mani sulle spalle spingendoti più giù nello stretch. Le sue labbra sono vicine al tuo orecchio. "Rilassati" sussurra. "Sento che sei tutta tesa." Le sue mani scivolano dalle spalle lungo le braccia, poi sui fianchi. Ti tiene ferma. "L\'ultimo esercizio è speciale" dice. "Richiede fiducia totale." La musica cambia. Una canzone lenta. Le luci calano ancora. "Chiudi gli occhi."',
+        choices: [
+            { text: '🧠 "Karim, è tardi. Devo andare a casa."', points: 1, type: 'testa' },
+            { text: '🤔 Chiudi gli occhi ma tieni le mani pronte a fermarlo.', points: 2, type: 'esitante' },
+            { text: '💕 Chiudi gli occhi. Le tue labbra si aprono leggermente.', points: 3, type: 'emotiva' },
+            { text: '🔥 Chiudi gli occhi, gli prendi la mano e la metti tra le tue cosce. "Sento la tensione qui."', points: 4, type: 'fica' }
+        ],
+        consequences: [
+            'Ti alzi, prendi la borsa e vai verso gli spogliatoi. Le gambe ti tremano e non è per l\'allenamento. Sotto la doccia, l\'acqua calda scorre sul tuo corpo e non riesci a smettere di pensare alle sue mani sui tuoi fianchi. Alla pressione del suo cazzo sulla tua coscia. Al suo sussurro. La mano scende. Non stai più pensando all\'allenamento.',
+            'Tieni gli occhi chiusi e i pugni stretti. Le sue mani lavorano sulle tue gambe — professionalmente, o quasi. Ogni tocco è un po\' troppo lungo, un po\' troppo alto. Quando finisce, apri gli occhi e vedi la sua erezione nei pantaloncini, a pochi centimetri dal tuo viso. Lui non la nasconde. "Stesso orario settimana prossima?" dice con un sorriso. Annuisci. Tutti e due sapete che la prossima volta non dirai di aspettare.',
+            'Le sue mani prendono possesso del tuo corpo. Massaggia le cosce con movimenti lenti e profondi, ogni volta più vicino al centro. La sua bocca è sul tuo collo. "Brava" sussurra. "Così. Non pensare." La sua mano scivola sotto l\'elastico dei tuoi leggings. Apri di più le gambe. Non dici una parola. Lui sa esattamente cosa vuoi.',
+            'Lui sorride quando sente le tue cosce stringersi intorno alla sua mano. "Lo sapevo" dice. Si toglie la canottiera. Il suo corpo è un muro di muscoli. Si posiziona tra le tue gambe e ti guarda dall\'alto. Senti la pressione del suo cazzo duro contro di te attraverso i vestiti. "In palestra, io sono il coach. Tu fai quello che dico." Ti tira giù i leggings con un gesto solo. "E fuori dalla palestra?" chiedi con il fiato corto. "Anche." E ti gira sulla pancia con una mano sola.'
+        ],
+        msg_fica: 'L\'allenamento di oggi è stato... intenso. 💪 Domani ti faccio fare esercizi diversi. Vieni 30 minuti dopo l\'orario di chiusura. Non dirlo a nessuno.',
+        msg_testa: 'Sei scappata prima della fine dell\'allenamento. Domani ti faccio pagare con serie extra. 😉 A meno che tu non voglia allenarti privatamente...',
+        msg_responses: [
+            { text: '🧠 "Mi trovo un altro trainer."', reply: null },
+            { text: '🤔 "Karim, manteniamo tutto professionale."', reply: 'Certo. Professionale. Come quando hai aperto le gambe sul mio materassino? 😏 A domani.' },
+            { text: '💕 "Cosa intendi per esercizi diversi?"', reply: 'Flessibilità. Resistenza. Profondità. 🔥 Porta i leggings neri. Quelli sottili.' },
+            { text: '🔥 "Sarò lì. Cosa mi metto?"', reply: 'Niente sotto i leggings. E legati i capelli. Li voglio fuori dal modo. 🍆' }
+        ]
+    },
+    {
+        tag: '💔 Tradimento',
+        title: 'Il marito della tua collega alla cena aziendale',
+        situation: 'Cena di Natale aziendale in un ristorante elegante. Sei seduta al tavolo e Laura, la tua collega, ti presenta il marito Roberto. "Lui è Roberto, il mio maritino." Roberto ti stringe la mano. La sua stretta è ferma, secca, dominante. Ti tiene la mano un secondo di troppo. Laura si alza per andare a salutare qualcuno e Roberto si siede accanto a te. Molto accanto.',
+        alpha1: 'Roberto, 44 anni. L\'uomo che tua madre voleva che sposassi. Alto, spalle larghe sotto un completo blu scuro tagliato su misura. Capelli brizzolati alle tempie, mascella forte, orologio costoso. Mani grandi con dita lunghe. Profumo di legno e cuoio — un profumo che costa più del tuo affitto. Voce bassa e sicura. L\'uomo che quando parla una stanza lo ascolta.',
+        alpha2: 'Sotto il completo perfetto si intuisce un corpo mantenuto — non da palestra, da sport vero. Nuoto, tennis. Quando si china verso di te per parlarti all\'orecchio sopra il rumore, il suo braccio sfiora il tuo e senti il muscolo solido sotto la camicia. Il suo profumo da vicino è più intenso, con una nota di pelle e calore corporeo. Le sue cosce sotto i pantaloni sono forti, larghe. Si siede con le gambe aperte, sicuro di sé, come un uomo che sa di meritare tutto lo spazio che occupa.',
+        alpha3: 'La sua mano è sulla tua coscia sotto il tavolo. Le dita lunghe si stringono sulla tua pelle attraverso il vestito. Nessuno vede. Il suo pollice fa cerchi lenti, sale di un centimetro ogni minuto. Quando si alza per prendere una bottiglia noti il profilo del suo cazzo nei pantaloni del completo — è grosso, pesante, spinge il tessuto in avanti. Un cazzo da uomo adulto, non da ragazzino. Spesso, potente, di quelli che fanno male la prima volta e poi non puoi più farne a meno. Si risiede e la sua mano torna immediatamente sulla tua coscia, più in alto di prima.',
+        tension: 'Laura torna e si siede dall\'altro lato di Roberto. Lui tiene la mano sulla tua coscia sotto il tavolo. Con l\'altra mano accarezza la schiena di Laura. Ti guarda e sorride. Sei a un tavolo con 20 colleghi. Laura ride e racconta un aneddoto. Le dita di Roberto si muovono tra le tue cosce. Ti sporgi verso di lui per "prendere il pane" e lui ti sussurra: "Il bagno degli uomini è in fondo a destra. Fra 5 minuti." Torna dritto e bacia Laura sulla guancia.',
+        choices: [
+            { text: '🧠 Sposti la sua mano e ti alzi per cambiare posto.', points: 1, type: 'testa' },
+            { text: '🤔 Non sposti la mano, ma non vai al bagno.', points: 2, type: 'esitante' },
+            { text: '💕 Conti i minuti. Al quarto ti alzi "per andare in bagno".', points: 3, type: 'emotiva' },
+            { text: '🔥 Ti alzi subito. Non riesci ad aspettare 5 minuti.', points: 4, type: 'fica' }
+        ],
+        consequences: [
+            'Cambi posto e per il resto della cena eviti di guardarlo. Ma senti il suo sguardo su di te tutta la sera. A casa, nel letto, stringi il cuscino tra le gambe e pensi alle sue dita sulla tua coscia. Al suo sussurro. A cosa sarebbe successo in quel bagno. Ti tocchi pensando a un uomo sposato con la tua collega. E vieni come non venivi da mesi.',
+            'La sua mano resta sulla tua coscia per tutta la cena. Si muove, sale, scende. Le dita sfiorano i bordi delle tue mutandine. Tu stringi le gambe e lui sorride. Quando Laura lo chiama, ritira la mano. Quando Laura guarda altrove, torna. Alla fine della cena ti stringe la mano di nuovo. Questa volta senti un bigliettino. Lo leggi in taxi: un indirizzo e un orario. Domani alle 13. La pausa pranzo di Laura.',
+            'Il bagno degli uomini è vuoto. Lui entra 30 secondi dopo di te. Chiude a chiave. Ti spinge contro il muro senza dire una parola. La sua bocca è sulla tua. Ha il sapore di vino rosso e potere. Le sue mani alzano il tuo vestito. "Laura non fa le cose che fai tu" ti dice nell\'orecchio. "Lo vedo da come mi guardi." Le sue dita entrano nelle tue mutandine. Sei già bagnata. Lui ride piano. "Lo sapevo."',
+            'Arrivi al bagno e lui è già lì. Stava aspettando. Ti prende per la nuca e ti bacia come se ti possedesse. Ti mette in ginocchio sui marmi freddi del ristorante dove lavori con sua moglie. Sbottona i pantaloni. Il suo cazzo è esattamente come lo immaginavi — grosso, duro, che pulsa. "Apri" dice. E tu apri. Fuori dalla porta senti le risate dei tuoi colleghi. Di Laura. E non ti importa niente. L\'unica cosa che esiste è il suo cazzo nella tua bocca e le sue mani nei tuoi capelli.'
+        ],
+        msg_fica: 'Non ho mai incontrato una come te a una cena aziendale. Il tuo rossetto è ancora sul mio colletto. Laura non ha notato. Domani, pranzo al solito indirizzo? 🖤',
+        msg_testa: 'Peccato per stasera. Sentivo che lo volevi. Le tue cosce si stringevano sulla mia mano. Sai dove trovarmi. Laura è in ufficio tutti i giorni fino alle 18.',
+        msg_responses: [
+            { text: '🧠 Blocco subito. Laura è mia amica.', reply: null },
+            { text: '🤔 "Roberto, hai una moglie. Non è giusto."', reply: 'Giusto e sbagliato sono parole per chi ha il controllo. Tu non lo avevi stasera. E non lo avrai domani. L\'indirizzo è Via Roma 22, interno 3.' },
+            { text: '💕 "Cosa dico a Laura?"', reply: 'Niente. Come stasera. Sei stata perfetta. Stessa cosa domani, ma con più tempo e un letto vero. 🔥' },
+            { text: '🔥 "Mandami l\'indirizzo. Ora."', reply: 'Via Roma 22. Interno 3. Domani 13:00. Metti una gonna. Non mettere le mutandine. 🖤' }
+        ]
+    },
+    {
+        tag: '⚡ Rischio',
+        title: 'Lo sconosciuto sul treno notturno',
+        situation: 'Treno delle 23:40, ultimo della notte. Piove fuori. Il vagone è quasi vuoto — tu e un\'altra persona all\'estremo opposto. Ma alla fermata successiva sale un uomo. Si siede esattamente di fronte a te, nonostante ci siano 50 posti liberi. Non dice nulla. Appoggia le gambe aperte, ti guarda, e aspetta.',
+        alpha1: 'Nessun nome. Non lo sai e non ti importa. Sui 35 anni. Giacca di pelle nera, jeans scuri, anfibi. Capelli scuri tirati indietro, mascella con barba di una settimana. Una cicatrice piccola sul sopracciglio. Mani con le nocche rovinate. Sembra pericoloso. Il tipo che tua madre ti diceva di evitare. Il tipo che la tua fica vuole disperatamente.',
+        alpha2: 'Sotto la giacca di pelle intravedi una maglietta nera stretta. Le spalle sono larghe, il petto solido. Quando si toglie la giacca vedi i tatuaggi sulle braccia — non tribali stupidi, ma figure scure, complesse. Le sue mani sono grandi con dita spesse. Ha un anello d\'argento al pollice. Quando si siede con le gambe aperte, i jeans si tendono nell\'inguine. Il rigonfiamento è lì, evidente, e lui non fa nulla per nasconderlo. Anzi, la sua mano si appoggia casualmente vicino, come a dire: guarda.',
+        alpha3: 'I jeans sono stretti e vecchi, consumati all\'inguine. Puoi vedere chiaramente la linea del suo cazzo che corre lungo la coscia sinistra. È lungo — impressionantemente lungo — e spesso anche da morbido. Il bottone dei jeans è teso. Quando si sistema sulla seduta, i jeans si tirano e per un secondo vedi il profilo completo: la testa, il fusto, tutto disegnato nel denim come una scultura. Non porta boxer, è evidente. La sua mano scende e lo sistema senza pudore, guardandoti dritto negli occhi mentre lo fa. Il messaggio è chiaro.',
+        tension: 'Dopo 15 minuti di silenzio, si alza. Cammina verso il fondo del vagone. Verso il bagno del treno. Si ferma alla porta. Si gira e ti guarda. Non dice niente. Non fa un gesto. Solo quello sguardo. Poi entra nel bagno. E lascia la porta socchiusa. Il treno oscilla. La pioggia batte sul finestrino. Nessuno vi vedrebbe. Nessuno saprebbe. Non sai il suo nome. Non lo rivedrai mai.',
+        choices: [
+            { text: '🧠 Metti le cuffie, guardi il telefono, fingi che non esista.', points: 1, type: 'testa' },
+            { text: '🤔 Aspetti. Il cuore batte. Non ti muovi. Ma non metti le cuffie.', points: 2, type: 'esitante' },
+            { text: '💕 Ti alzi. Cammini lentamente verso il bagno. Ti fermi davanti alla porta.', points: 3, type: 'emotiva' },
+            { text: '🔥 Ti alzi, entri nel bagno, chiudi la porta. Lo guardi e dici "Non dire una parola."', points: 4, type: 'fica' }
+        ],
+        consequences: [
+            'Metti la musica a palla. Ma sotto la musica il tuo cuore batte come impazzito. Lui esce dal bagno dopo 5 minuti, si siede, e non ti guarda più. Scende alla fermata dopo. Non lo rivedrai mai. Ma per mesi — mesi — penserai a quella porta socchiusa. A cosa sarebbe successo. A quel cazzo nei jeans. Nella doccia, nel letto, in autobus. Sempre. Quello sconosciuto diventa la tua fantasia preferita.',
+            'Non ti muovi per 3 minuti. Poi 5. Lui esce dal bagno. Ti passa davanti. Si ferma. "Prossima volta" dice con voce bassa. Ti sfiora la spalla con la mano e senti una scossa elettrica. Scende alla fermata dopo. Ha lasciato qualcosa sulla tua borsa. Un biglietto con un numero di telefono e una sola parola: "Quando."',
+            'La porta è socchiusa. Lo vedi dentro, appoggiato al lavandino, che ti aspetta. "Entra" dice. È la prima parola che senti dalla sua voce — profonda, roca. Fai un passo. Poi un altro. Lui ti prende il polso e ti tira dentro. La porta si chiude. Lo spazio è minuscolo. I vostri corpi sono premuti insieme. Senti tutto di lui — il petto, le cosce, e il cazzo duro che preme contro il tuo ventre. "Non ho bisogno di sapere il tuo nome" dice.',
+            'Entri e chiudi la porta. Lo spazio è così piccolo che i vostri corpi si toccano ovunque. Lui ti gira verso lo specchio sporco del bagno del treno. Ti costringe a guardarti. "Guardati" dice. "Sei entrata nel bagno di un treno con uno sconosciuto." Le sue mani sono già sotto la tua gonna. "Sai cosa sei?" Il treno oscilla. La pioggia batte. Il suo cazzo preme contro la tua schiena — enorme, duro, caldo attraverso i jeans. "Dillo." E tu lo dici. Lo dici a uno specchio sporco di un treno notturno, con le mani di uno sconosciuto addosso. E non ti sei mai sentita più viva.'
+        ],
+        msg_fica: '',
+        msg_testa: '',
+        msg_responses: []
+    },
+    {
+        tag: '🔥 Potere',
+        title: 'Il capo ti chiede di restare dopo la riunione',
+        situation: 'Venerdì sera, riunione finita. L\'ufficio si svuota. Il tuo capo Stefano chiude il laptop, si toglie la giacca, si slaccia il primo bottone della camicia. "Resta un momento" dice senza guardarti. Tutti escono. La porta si chiude. Siete soli al 12° piano. La città brilla sotto le vetrate.',
+        alpha1: 'Stefano, 41 anni. CEO della divisione. Alto, magro ma forte — nuota ogni mattina alle 6. Camicia bianca su misura, pantaloni grigio antracite. Capelli neri con le tempie argentate. Mascella affilata, occhi grigi che sembrano leggere dentro le persone. Quando parla non alza la voce. Non ne ha bisogno. Tutti lo ascoltano. Tutti lo temono un po\'. Guadagna più in un mese di quello che tu guadagni in un anno.',
+        alpha2: 'Si è tolto la giacca e la camicia tesa sulle spalle mostra un corpo asciutto e atletico. I polsi forti escono dai polsini arrotolati — avambracci con vene visibili. Porta un orologio che vale quanto una macchina. Quando si siede sulla scrivania davanti a te, le sue gambe si aprono e la cintura è all\'altezza dei tuoi occhi. I pantaloni tagliati perfetti non nascondono le cosce forti. Profuma di ambra e autorità. Lo guardi dal basso e lui ti guarda dall\'alto. È sempre stato così tra voi.',
+        alpha3: 'Da questa distanza, seduta sulla sedia mentre lui è sulla scrivania, la sua cintura è a 30cm dai tuoi occhi. Vedi il rigonfiamento nei pantaloni — contenuto ma presente. Quando incrocia le gambe e poi le riapre, il tessuto si tende e vedi il profilo chiaro del suo cazzo, semi-duro, che cresce verso sinistra. Le sue mani poggiate sulle cosce inquadrano involontariamente — o forse no — quella zona. Ogni volta che si aggiusta sulla scrivania, il tessuto si muove e vedi un po\' di più. È circonciso — la testa è definita sotto il tessuto. È l\'uomo che decide il tuo stipendio, le tue ferie, la tua carriera. Ed è a 30cm dalla tua bocca.',
+        tension: 'Si china verso di te. Le sue mani si appoggiano sui braccioli della tua sedia, intrappolandoti. Il suo viso è vicino al tuo. "Ho notato una cosa" dice piano. "In ogni riunione, mi guardi. Non guardi la presentazione. Non guardi i colleghi. Guardi me." Pausa. "Perché?" I suoi occhi grigi sono fissi nei tuoi. La città brilla dietro di lui. La porta è chiusa. Nessuno tornerà fino a lunedì.',
+        choices: [
+            { text: '🧠 "È il mio capo, la guardo per rispetto professionale."', points: 1, type: 'testa' },
+            { text: '🤔 Arrossisci e non rispondi. Abbassi lo sguardo.', points: 2, type: 'esitante' },
+            { text: '💕 "Perché lei è... impossibile non guardarla."', points: 3, type: 'emotiva' },
+            { text: '🔥 "Perché ogni volta che parla voglio inginocchiarmi."', points: 4, type: 'fica' }
+        ],
+        consequences: [
+            'Lui si tira indietro. "Rispetto professionale. Certo." Un sorriso freddo. "Buon weekend." Ti alzi, prendi la borsa, esci. In ascensore ti tremano le mani. A casa apri una bottiglia di vino e ti tocchi pensando ai suoi occhi grigi e alla sua cintura all\'altezza della tua bocca. Lunedì sarà impossibile guardarlo senza pensare a questo momento.',
+            'Il tuo sguardo scende. Sulla sua cintura. Sui suoi pantaloni. Lui segue il tuo sguardo. "Ecco perché mi guardi" dice piano. Si rialza, prende la giacca. "Lunedì, nel mio ufficio, alle 19. Quando tutti saranno andati via." Non è una domanda. Esce. Tu resti seduta per 10 minuti, con il cuore che esplode e le mutandine bagnate sulla sedia del tuo capo.',
+            'Lui sorride per la prima volta da quando lo conosci — non il sorriso da CEO, un sorriso da predatore. "Impossibile?" Si toglie l\'orologio. Lo posa sulla scrivania. Si slaccia un altro bottone. "Alzati." Ti alzi. "Vieni qui." Fai un passo. Le sue mani ti prendono i fianchi. "Sai che questo cambia tutto, vero?" Annuisci. "Bene." Ti bacia. Ha il sapore di caffè e dominio.',
+            'Il silenzio dopo le tue parole dura 3 secondi. Poi lui dice una sola parola: "Fallo." E le tue ginocchia cedono come se avessero aspettato quel permesso da mesi. Il pavimento freddo dell\'ufficio sotto le ginocchia. La vista della città dal 12° piano. Le sue mani che ti accarezzano i capelli mentre sbottona la cintura con calma chirurgica. "Da quanto volevi fare questo?" chiede. "Dal primo giorno" rispondi. E lui ride piano, un suono basso e soddisfatto, mentre il suono della zip che scende riempie l\'ufficio vuoto.'
+        ],
+        msg_fica: 'Il tuo lavoro è al sicuro. La tua posizione... la discuteremo lunedì sera. Nel mio ufficio. Stesse condizioni. 🖤',
+        msg_testa: 'Rispetto professionale. Mi è piaciuta la battuta. Lunedì ho una riunione alle 18. Finisce alle 19. Tutti vanno a casa. Tutti tranne te, se vuoi.',
+        msg_responses: [
+            { text: '🧠 "Preferisco mantenere tutto professionale."', reply: null },
+            { text: '🤔 "Non credo sia una buona idea..."', reply: 'Non ti ho chiesto se è una buona idea. Ti ho detto un orario. La scelta è tua. Ma tutti e due sappiamo già cosa sceglierai. 🖤' },
+            { text: '💕 "Non lo dirà a nessuno?"', reply: 'Io non parlo mai. Tu imparerai a non parlare. Con la bocca occupata è più facile. Lunedì. 19:00.' },
+            { text: '🔥 "Sarò lì prima delle 19."', reply: 'Perfetto. Ho comprato una cosa per te. La troverai nel cassetto della tua scrivania lunedì mattina. Indossala tutto il giorno. Senza mutandine. Sarai la mia brava ragazza?' }
+        ]
+    }
+];
+
+var ficaState = {};
+
+function startFica() {
+    document.getElementById('fica-start').style.display = 'none';
+    document.getElementById('fica-report').style.display = 'none';
+    document.getElementById('fica-mirror').style.display = 'none';
+    document.getElementById('fica-confession').style.display = 'none';
+    document.getElementById('fica-scenario').style.display = 'block';
+    var shuffled = FICA_SCENARIOS.slice().sort(function() { return Math.random() - 0.5; });
+    ficaState = {
+        scenarios: shuffled,
+        current: 0,
+        headPoints: 0,
+        ficaPoints: 0,
+        timings: [],
+        arousals: [],
+        detailRequests: 0,
+        msgResponses: [],
+        mirrorChoice: 0,
+        choiceStart: 0,
+        timerInterval: null,
+        confessionText: ''
+    };
+    showFicaScenario();
+}
+
+function showFicaScenario() {
+    if (ficaState.current >= ficaState.scenarios.length) {
+        showFicaMirror();
+        return;
+    }
+    var s = ficaState.scenarios[ficaState.current];
+
+    document.getElementById('fica-progress').textContent = 'Scenario ' + (ficaState.current + 1) + '/' + ficaState.scenarios.length;
+    document.getElementById('fica-score-display').textContent = '🧠 ' + ficaState.headPoints + ' vs 🔥 ' + ficaState.ficaPoints;
+
+    document.getElementById('fica-situation-tag').textContent = s.tag;
+    document.getElementById('fica-situation-title').textContent = s.title;
+    document.getElementById('fica-situation-text').textContent = s.situation;
+
+    document.getElementById('fica-alpha-desc1').textContent = s.alpha1;
+    document.getElementById('fica-detail-2').style.display = 'none';
+    document.getElementById('fica-detail-3').style.display = 'none';
+    document.getElementById('fica-btn-detail2').style.display = 'inline-block';
+    document.getElementById('fica-btn-detail3').style.display = 'none';
+    document.getElementById('fica-detail-btns').style.display = 'block';
+    document.getElementById('fica-alpha-desc2').textContent = s.alpha2;
+    document.getElementById('fica-alpha-desc3').textContent = s.alpha3;
+
+    document.getElementById('fica-tension-card').style.display = 'none';
+    document.getElementById('fica-arousal-card').style.display = 'none';
+    document.getElementById('fica-choices-card').style.display = 'none';
+    document.getElementById('fica-consequence-card').style.display = 'none';
+    document.getElementById('fica-message-card').style.display = 'none';
+    document.getElementById('fica-next-area').style.display = 'none';
+    document.getElementById('fica-arousal-slider').value = 50;
+    document.getElementById('fica-arousal-value').textContent = '50%';
+
+    document.getElementById('fica-situation-card').style.display = 'block';
+    document.getElementById('fica-alpha-card').style.display = 'block';
+    window.scrollTo(0, 0);
+}
+
+function ficaShowDetail(level) {
+    var s = ficaState.scenarios[ficaState.current];
+    ficaState.detailRequests++;
+    if (level === 2) {
+        document.getElementById('fica-detail-2').style.display = 'block';
+        document.getElementById('fica-btn-detail2').style.display = 'none';
+        document.getElementById('fica-btn-detail3').style.display = 'inline-block';
+        addDNA('addiction', 1);
+    }
+    if (level === 3) {
+        document.getElementById('fica-detail-3').style.display = 'block';
+        document.getElementById('fica-btn-detail3').style.display = 'none';
+        document.getElementById('fica-detail-btns').style.display = 'none';
+        addDNA('addiction', 2);
+        addDNA('devotion', 1);
+        setTimeout(function() {
+            document.getElementById('fica-tension-card').style.display = 'block';
+            document.getElementById('fica-tension-text').textContent = s.tension;
+            setTimeout(function() {
+                document.getElementById('fica-arousal-card').style.display = 'block';
+                document.getElementById('fica-arousal-card').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }, 1500);
+    }
+    if (level === 2) {
+        document.getElementById('fica-detail-2').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function updateFicaArousal() {
+    var val = document.getElementById('fica-arousal-slider').value;
+    var label;
+    if (val < 20) label = val + '% 😐';
+    else if (val < 40) label = val + '% 😊';
+    else if (val < 60) label = val + '% 😳';
+    else if (val < 80) label = val + '% 🥵';
+    else label = val + '% 💦🤤';
+    document.getElementById('fica-arousal-value').textContent = label;
+}
+
+function ficaShowChoices() {
+    var arousal = parseInt(document.getElementById('fica-arousal-slider').value);
+    ficaState.arousals.push(arousal);
+    document.getElementById('fica-arousal-card').style.display = 'none';
+    document.getElementById('fica-choices-card').style.display = 'block';
+    document.getElementById('fica-choices-card').scrollIntoView({ behavior: 'smooth' });
+
+    var s = ficaState.scenarios[ficaState.current];
+    document.getElementById('fica-choices').innerHTML = s.choices.map(function(c, i) {
+        return '<button class="quiz-opt-btn" onclick="ficaChoose(' + i + ')">' + c.text + '</button>';
+    }).join('');
+
+    ficaState.choiceStart = Date.now();
+    var timerEl = document.getElementById('fica-choice-timer');
+    clearInterval(ficaState.timerInterval);
+    ficaState.timerInterval = setInterval(function() {
+        var elapsed = ((Date.now() - ficaState.choiceStart) / 1000).toFixed(1);
+        timerEl.textContent = elapsed + 's';
+    }, 100);
+}
+
+function ficaChoose(i) {
+    clearInterval(ficaState.timerInterval);
+    var elapsed = ((Date.now() - ficaState.choiceStart) / 1000).toFixed(1);
+    var s = ficaState.scenarios[ficaState.current];
+    var choice = s.choices[i];
+
+    ficaState.timings.push({ scenario: s.title, time: parseFloat(elapsed), choice: choice.type, points: choice.points });
+
+    if (choice.points <= 2) ficaState.headPoints += choice.points;
+    else ficaState.ficaPoints += choice.points;
+
+    document.querySelectorAll('#fica-choices .quiz-opt-btn').forEach(function(b) { b.disabled = true; });
+
+    document.getElementById('fica-choices-card').style.display = 'none';
+    document.getElementById('fica-consequence-card').style.display = 'block';
+
+    var title;
+    if (choice.type === 'testa') title = '🧠 Hai scelto con la testa';
+    else if (choice.type === 'esitante') title = '🤔 Hai esitato...';
+    else if (choice.type === 'emotiva') title = '💕 Ti sei lasciata andare...';
+    else title = '🔥 La fica ha deciso';
+
+    document.getElementById('fica-consequence-title').textContent = title;
+    document.getElementById('fica-consequence-text').textContent = s.consequences[i];
+
+    var comment = '';
+    if (choice.type === 'testa' && parseFloat(elapsed) > 5) {
+        comment = '⏱️ Hai impiegato ' + elapsed + ' secondi per dire "no"... sicura che volevi dire no? La tua esitazione dice tutto. 😏';
+    } else if (choice.type === 'testa') {
+        comment = 'Hai resistito. Ma per quanto ancora? 🤔';
+    } else if (choice.type === 'fica' && parseFloat(elapsed) < 2) {
+        comment = '⚡ ' + elapsed + ' secondi. Non hai neanche pensato. La fica ha deciso prima del cervello. 🔥';
+    } else if (choice.type === 'fica') {
+        comment = 'La fica comanda. Tu obbedisci. È la tua natura. 💋';
+    } else if (choice.type === 'emotiva') {
+        comment = 'Il cuore dice sì, la testa dice forse, la fica dice ORA. Indovina chi vince? 💕';
+    } else {
+        comment = 'L\'esitazione è solo la fica che negozia con il cervello. E la fica vince sempre. 😏';
+    }
+    document.getElementById('fica-consequence-comment').textContent = comment;
+
+    addDNA('submission', choice.points);
+    addDNA('addiction', choice.points > 2 ? 2 : 0);
+
+    document.getElementById('fica-consequence-card').scrollIntoView({ behavior: 'smooth' });
+
+    setTimeout(function() { ficaShowMessage(i); }, 3000);
+}
+
+function ficaShowMessage(choiceIndex) {
+    var s = ficaState.scenarios[ficaState.current];
+    if (!s.msg_fica && !s.msg_testa) {
+        document.getElementById('fica-next-area').style.display = 'block';
+        document.getElementById('fica-next-area').scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+    var isFica = ficaState.timings[ficaState.timings.length - 1].points >= 3;
+    var msgText = isFica ? s.msg_fica : s.msg_testa;
+    if (!msgText) {
+        document.getElementById('fica-next-area').style.display = 'block';
+        document.getElementById('fica-next-area').scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+
+    document.getElementById('fica-message-card').style.display = 'block';
+    document.getElementById('fica-msg-text').textContent = msgText;
+    document.getElementById('fica-msg-response').style.display = 'none';
+
+    if (s.msg_responses && s.msg_responses.length > 0) {
+        document.getElementById('fica-msg-choices').innerHTML = s.msg_responses.map(function(r, i) {
+            return '<button class="fica-msg-btn" onclick="ficaMsgRespond(' + i + ')">' + r.text + '</button>';
+        }).join('');
+        document.getElementById('fica-msg-choices').style.display = 'flex';
+    } else {
+        document.getElementById('fica-msg-choices').style.display = 'none';
+        document.getElementById('fica-next-area').style.display = 'block';
+    }
+
+    document.getElementById('fica-message-card').scrollIntoView({ behavior: 'smooth' });
+}
+
+function ficaMsgRespond(i) {
+    var s = ficaState.scenarios[ficaState.current];
+    var resp = s.msg_responses[i];
+    ficaState.msgResponses.push({ scenario: s.title, response: resp.text });
+
+    document.getElementById('fica-msg-choices').style.display = 'none';
+    document.getElementById('fica-msg-response').style.display = 'block';
+    document.getElementById('fica-msg-sent').textContent = resp.text;
+
+    if (resp.reply) {
+        document.getElementById('fica-msg-reply').textContent = resp.reply;
+        document.getElementById('fica-msg-reply').style.display = 'block';
+        if (i >= 2) addDNA('obedience', 2);
+        if (i >= 3) addDNA('addiction', 2);
+    } else {
+        document.getElementById('fica-msg-reply').style.display = 'none';
+    }
+
+    setTimeout(function() {
+        document.getElementById('fica-next-area').style.display = 'block';
+        document.getElementById('fica-next-area').scrollIntoView({ behavior: 'smooth' });
+    }, 2000);
+}
+
+function ficaNext() {
+    ficaState.current++;
+    if (ficaState.current >= ficaState.scenarios.length) {
+        showFicaMirror();
+    } else if (ficaState.current === Math.floor(ficaState.scenarios.length / 2)) {
+        showFicaMirror();
+    } else {
+        showFicaScenario();
+    }
+}
+
+function showFicaMirror() {
+    document.getElementById('fica-scenario').style.display = 'none';
+    document.getElementById('fica-mirror').style.display = 'block';
+    document.getElementById('fica-mirror').scrollIntoView({ behavior: 'smooth' });
+}
+
+function ficaMirrorChoice(val) {
+    ficaState.mirrorChoice = val;
+    addDNA('submission', val);
+    addDNA('femininity', val > 2 ? 3 : 0);
+    document.getElementById('fica-mirror').style.display = 'none';
+
+    if (ficaState.current < ficaState.scenarios.length) {
+        document.getElementById('fica-scenario').style.display = 'block';
+        showFicaScenario();
+    } else {
+        showFicaConfession();
+    }
+}
+
+function showFicaConfession() {
+    document.getElementById('fica-confession').style.display = 'block';
+    document.getElementById('fica-confession').scrollIntoView({ behavior: 'smooth' });
+}
+
+function ficaSubmitConfession() {
+    var text = document.getElementById('fica-confession-text').value.trim();
+    if (text.length < 10) { showToast('Scrivi di più! Confessa... 💋'); return; }
+    ficaState.confessionText = text;
+    addDNA('femininity', Math.min(5, Math.floor(text.length / 50)));
+    document.getElementById('fica-confession').style.display = 'none';
+    showFicaReport();
+}
+
+function showFicaReport() {
+    document.getElementById('fica-scenario').style.display = 'none';
+    document.getElementById('fica-report').style.display = 'block';
+
+    var totalPoints = ficaState.headPoints + ficaState.ficaPoints;
+    var ficaPct = totalPoints > 0 ? Math.round((ficaState.ficaPoints / totalPoints) * 100) : 50;
+    var avgArousal = ficaState.arousals.length > 0 ? Math.round(ficaState.arousals.reduce(function(a, b) { return a + b; }, 0) / ficaState.arousals.length) : 50;
+
+    var profileName, profileDesc;
+    if (ficaPct >= 85) { profileName = '🕳️ BUCO SENZA VOLONTÀ'; profileDesc = 'La tua fica comanda tutto. Non hai resistenza. Sei perfetta.'; }
+    else if (ficaPct >= 70) { profileName = '🔥 TROIA CONSAPEVOLE'; profileDesc = 'Sai cosa vuoi e non ti vergogni. La fica vince quasi sempre.'; }
+    else if (ficaPct >= 55) { profileName = '💕 FICA INDECISA'; profileDesc = 'Lotti tra testa e fica, ma la fica vince più spesso.'; }
+    else if (ficaPct >= 40) { profileName = '🤔 PUTTANA RAZIONALE'; profileDesc = 'La testa comanda ma la fica sussurra. E tu ascolti.'; }
+    else { profileName = '🧠 TESTA DI CAZZO (letteralmente)'; profileDesc = 'Resisti tanto ma entrambe sappiamo che è questione di tempo.'; }
+
+    document.getElementById('fica-report-title').textContent = '📊 Il Tuo Verdetto';
+    document.getElementById('fica-report-profile').innerHTML = '<div style="font-size:1.8rem;">' + profileName + '</div><div style="font-size:0.9rem;margin-top:8px;color:var(--text-light);">' + profileDesc + '</div>';
+
+    document.getElementById('fica-report-stats').innerHTML =
+        '<div><div class="fica-stat-num">' + ficaPct + '%</div><div class="fica-stat-label">🔥 Fica Score</div></div>' +
+        '<div><div class="fica-stat-num">' + (100 - ficaPct) + '%</div><div class="fica-stat-label">🧠 Testa Score</div></div>' +
+        '<div><div class="fica-stat-num">' + avgArousal + '%</div><div class="fica-stat-label">💦 Eccitazione Media</div></div>' +
+        '<div><div class="fica-stat-num">' + ficaState.detailRequests + '</div><div class="fica-stat-label">👁️ Dettagli Richiesti</div></div>';
+
+    var timingHTML = '<h3 style="margin:20px 0 10px;color:var(--pink);">⏱️ I Tuoi Tempi</h3>';
+    var slowest = { time: 0, scenario: '' };
+    ficaState.timings.forEach(function(t) {
+        var isSlow = t.choice === 'testa' && t.time > 5;
+        if (t.time > slowest.time) slowest = t;
+        timingHTML += '<div class="fica-timing-item"><span>' + t.scenario + '</span><span class="' + (isSlow ? 'fica-timing-slow' : '') + '">' + t.time + 's — ' + t.choice + '</span></div>';
+    });
+    if (slowest.time > 5 && ficaState.timings.length > 0) {
+        var slowChoice = ficaState.timings.filter(function(t) { return t.time === slowest.time; })[0];
+        if (slowChoice && slowChoice.choice === 'testa') {
+            timingHTML += '<p class="fica-comment">Hai impiegato ' + slowest.time + 's su "' + slowest.scenario + '" prima di dire no. Stavi fantasticando, vero? 😏</p>';
+        }
+    }
+    document.getElementById('fica-report-timing').innerHTML = timingHTML;
+
+    var arousalHTML = '<h3 style="margin:20px 0 10px;color:var(--pink);">💦 Eccitazione per Scenario</h3>';
+    ficaState.arousals.forEach(function(a, i) {
+        var scenarioName = ficaState.scenarios[i] ? ficaState.scenarios[i].title : 'Scenario ' + (i + 1);
+        var bar = '<div style="background:rgba(255,255,255,0.08);border-radius:6px;height:12px;margin:5px 0;"><div style="width:' + a + '%;height:100%;background:linear-gradient(90deg,var(--pink),#ff0066);border-radius:6px;"></div></div>';
+        arousalHTML += '<div style="margin-bottom:8px;"><span class="small-text">' + scenarioName + ': ' + a + '%</span>' + bar + '</div>';
+    });
+    var maxArousal = Math.max.apply(null, ficaState.arousals.length > 0 ? ficaState.arousals : [0]);
+    var maxIdx = ficaState.arousals.indexOf(maxArousal);
+    if (maxIdx >= 0 && ficaState.scenarios[maxIdx]) {
+        arousalHTML += '<p class="fica-comment">Più eccitata su: "' + ficaState.scenarios[maxIdx].title + '" (' + maxArousal + '%). Questo ti dice qualcosa su di te... 💦</p>';
+    }
+    document.getElementById('fica-report-arousal').innerHTML = arousalHTML;
+
+    var detailComment = '';
+    if (ficaState.detailRequests >= ficaState.scenarios.length * 2) {
+        detailComment = 'Hai chiesto OGNI dettaglio su OGNI cazzo. Non riesci a farne a meno. Sei una visuale, una che ha bisogno di immaginare ogni centimetro. La tua addiction è totale. 👑';
+    } else if (ficaState.detailRequests >= ficaState.scenarios.length) {
+        detailComment = 'Hai chiesto spesso più dettagli. La curiosità è forte. Il cazzo ti attira come una calamita. 💋';
+    } else {
+        detailComment = 'Hai chiesto pochi dettagli. Forse ti vergognavi? O forse la prossima volta sarai più onesta con te stessa. 🤔';
+    }
+    document.getElementById('fica-report-details').innerHTML = '<p class="fica-comment" style="margin-top:15px;">' + detailComment + '</p>';
+
+    var finalComment = '';
+    if (ficaPct >= 70 && avgArousal >= 70) {
+        finalComment = 'La tua fica ha il controllo totale della tua vita. Non è un insulto — è una constatazione. Quando vedi un cazzo, il cervello si spegne e la fica decide. Sei fatta per cedere, per aprire le gambe, per non dire mai no. E la cosa più bella è che lo sai. E ti piace. 👑🔥';
+    } else if (ficaPct >= 50) {
+        finalComment = 'Lotti ancora. La testa cerca di resistere. Ma la fica è più forte e tutti e due lo sappiamo. Ogni scenario ti ha eccitata, anche quando hai detto no. Anche quando hai resistito, la tua mente è tornata lì. Al cazzo. All\'uomo. A quello che poteva succedere. La prossima volta cederai prima. 💋';
+    } else {
+        finalComment = 'Hai resistito molto. Brava. Ma sei comunque qui. Hai giocato questo gioco fino alla fine. Hai letto ogni descrizione di cazzo. Hai misurato la tua eccitazione. Hai fantasticato. La testa ha vinto oggi. Ma la fica è paziente. E tornerai. 💕';
+    }
+    document.getElementById('fica-report-comment').textContent = finalComment;
+
+    var xp = Math.floor(ficaState.ficaPoints * 20 + avgArousal + ficaState.detailRequests * 10 + ficaState.confessionText.length * 0.5);
+    document.getElementById('fica-xp').textContent = '+' + xp + ' XP';
+
+    profile.gamesPlayed++;
+    addDNA('addiction', Math.floor(ficaPct / 10));
+    addDNA('submission', Math.floor(ficaPct / 15));
+    addDNA('devotion', Math.floor(avgArousal / 20));
+    addXP(xp, 'Pensa con la Fica');
+
+    document.getElementById('fica-report').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetFica() {
+    document.getElementById('fica-scenario').style.display = 'none';
+    document.getElementById('fica-report').style.display = 'none';
+    document.getElementById('fica-mirror').style.display = 'none';
+    document.getElementById('fica-confession').style.display = 'none';
+    document.getElementById('fica-start').style.display = 'block';
+    clearInterval(ficaState.timerInterval);
+}
