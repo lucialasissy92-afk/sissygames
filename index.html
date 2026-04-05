@@ -287,4 +287,737 @@
         </div>
         <div class="card" id="quiz-question-card">
             <h3 id="quiz-category"></h3>
-            <p id="quiz-question"
+            <p id="quiz-question" class="quiz-question"></p>
+            <div id="quiz-options" class="quiz-options"></div>
+            <p id="quiz-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="quiz-result" class="card" style="display:none;">
+        <h2 id="quiz-result-title"></h2>
+        <p id="quiz-result-text"></p>
+        <div id="quiz-result-detail"></div>
+        <p class="xp-text" id="quiz-xp"></p>
+        <button class="btn" onclick="startQuiz()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- SIZE GUESS -->
+<div id="page-sizeguess" class="page">
+    <h1>📐 Size Guess</h1>
+    <div id="sg-start" class="card">
+        <p>Leggi la descrizione del cazzo e indovina la lunghezza in cm. Più sei precisa, più punti guadagni!</p>
+        <button class="btn" onclick="startSizeGuess()">Inizia!</button>
+    </div>
+    <div id="sg-game" style="display:none;">
+        <div class="game-stats">
+            <span id="sg-round">Round 1/8</span>
+            <span id="sg-score-display">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="sg-description" class="quiz-question"></p>
+            <div class="sg-slider-container">
+                <input type="range" id="sg-slider" min="8" max="30" value="15" oninput="updateSGSlider()">
+                <div id="sg-slider-value" class="sg-value">15 cm</div>
+            </div>
+            <button class="btn" id="sg-submit" onclick="submitSizeGuess()">Conferma 💋</button>
+            <p id="sg-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="sg-result" class="card" style="display:none;">
+        <h2 id="sg-result-title"></h2>
+        <p id="sg-result-text"></p>
+        <p class="xp-text" id="sg-xp"></p>
+        <button class="btn" onclick="startSizeGuess()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- ALPHA PROFILE -->
+<div id="page-alphaprofile" class="page">
+    <h1>👑 Alpha Profile</h1>
+    <div id="ap-start" class="card">
+        <p>Studia il profilo dell'Alpha. Memorizza i dettagli. Poi rispondi alle domande su di lui.</p>
+        <button class="btn" onclick="startAlphaProfile()">Mostrami l'Alpha 👑</button>
+    </div>
+    <div id="ap-study" style="display:none;">
+        <div class="card alpha-card">
+            <h2 id="ap-name"></h2>
+            <div id="ap-details" class="alpha-details"></div>
+            <div id="ap-timer-bar" class="timer-bar"><div id="ap-timer-fill" class="timer-fill"></div></div>
+            <p id="ap-study-msg" class="game-msg">Memorizza tutto... ⏳</p>
+        </div>
+    </div>
+    <div id="ap-quiz" style="display:none;">
+        <div class="game-stats">
+            <span id="ap-q-progress">Domanda 1/5</span>
+            <span id="ap-q-score">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="ap-question" class="quiz-question"></p>
+            <div id="ap-options" class="quiz-options"></div>
+            <p id="ap-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="ap-worship" style="display:none;">
+        <div class="card">
+            <h2>Scrivi la tua adorazione 💋</h2>
+            <p id="ap-worship-prompt"></p>
+            <textarea id="ap-worship-text" class="worship-textarea" placeholder="Scrivi qui la tua adorazione..." rows="5"></textarea>
+            <button class="btn" onclick="submitWorship()">Invia Adorazione 💕</button>
+        </div>
+    </div>
+    <div id="ap-result" class="card" style="display:none;">
+        <h2 id="ap-result-title"></h2>
+        <p id="ap-result-text"></p>
+        <p class="xp-text" id="ap-xp"></p>
+        <button class="btn" onclick="startAlphaProfile()">Prossimo Alpha</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- COCK CONFESSION -->
+<div id="page-confession" class="page">
+    <h1>💋 Cock Confession</h1>
+    <div id="conf-start" class="card">
+        <p>Rispondi sinceramente alle domande. Più sei onesta, più punti guadagni. Nessuno giudica qui. 💕</p>
+        <button class="btn" onclick="startConfession()">Inizia la Confessione</button>
+    </div>
+    <div id="conf-game" style="display:none;">
+        <div class="game-stats">
+            <span id="conf-progress">Domanda 1/10</span>
+            <span id="conf-score-display">Punti: 0</span>
+        </div>
+        <div class="card">
+            <p id="conf-question" class="quiz-question"></p>
+            <div id="conf-options" class="quiz-options"></div>
+            <p id="conf-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="conf-result" class="card" style="display:none;">
+        <h2 id="conf-result-title"></h2>
+        <p id="conf-result-text"></p>
+        <div id="conf-result-profile"></div>
+        <p class="xp-text" id="conf-xp"></p>
+        <button class="btn" onclick="startConfession()">Confessa Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- WORSHIP WORDS -->
+<div id="page-worship" class="page">
+    <h1>🔤 Worship Words</h1>
+    <div id="ww-start" class="card">
+        <p>Completa le frasi di adorazione con la parola giusta. Allena il tuo vocabolario devoto!</p>
+        <button class="btn" onclick="startWorshipWords()">Inizia!</button>
+    </div>
+    <div id="ww-game" style="display:none;">
+        <div class="game-stats">
+            <span id="ww-progress">Frase 1/10</span>
+            <span id="ww-score-display">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="ww-sentence" class="quiz-question"></p>
+            <div id="ww-options" class="quiz-options"></div>
+            <p id="ww-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="ww-result" class="card" style="display:none;">
+        <h2 id="ww-result-title"></h2>
+        <p id="ww-result-text"></p>
+        <p class="xp-text" id="ww-xp"></p>
+        <button class="btn" onclick="startWorshipWords()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- SESSIONS LIST -->
+<div id="page-sessions" class="page">
+    <h1>🧠 Sessioni BM</h1>
+    <div class="game-grid">
+        <div class="game-card session-card" onclick="startSession(1)">
+            <div class="game-icon">👁️</div>
+            <h3>Session 1: First Gaze</h3>
+            <p>Il primo sguardo. Scopri la tua reazione.</p>
+        </div>
+        <div class="game-card session-card" onclick="startSession(2)">
+            <div class="game-icon">📏</div>
+            <h3>Session 2: Size Acceptance</h3>
+            <p>Accetta le differenze. Trova il tuo posto.</p>
+        </div>
+        <div class="game-card session-card" onclick="startSession(3)">
+            <div class="game-icon">🙇</div>
+            <h3>Session 3: Surrender</h3>
+            <p>La resa completa. Il potere della sottomissione.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SESSION PLAYER -->
+<div id="page-session-player" class="page">
+    <div class="session-screen">
+        <div id="session-bg" class="session-bg"></div>
+        <div class="session-content">
+            <p id="session-text" class="session-text"></p>
+            <div class="session-progress"><div id="session-bar" class="session-bar"></div></div>
+        </div>
+        <button class="btn btn-secondary session-exit" onclick="exitSession()">✕ Esci</button>
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page">
+    <h1>💜 Il Tuo Profilo</h1>
+    <div id="profile-setup" class="card">
+        <h3>Come vuoi essere chiamata?</h3>
+        <input type="text" id="sissy-name-input" class="mantra-input" placeholder="Il tuo nome sissy...">
+        <button class="btn" onclick="saveProfile()">Salva 💋</button>
+    </div>
+    <div id="profile-view" style="display:none;">
+        <div class="card">
+            <h2 id="profile-name">Sissy</h2>
+            <p>Titolo: <span id="profile-title">Curious</span></p>
+        </div>
+        <div class="card">
+            <h3>📊 Statistiche</h3>
+            <div class="stats-grid">
+                <div>✨ XP: <span id="stat-xp">0</span></div>
+                <div>⭐ Livello: <span id="stat-level">1</span></div>
+                <div>🎮 Giochi: <span id="stat-games">0</span></div>
+                <div>🧠 Sessioni: <span id="stat-sessions">0</span></div>
+                <div>🔥 Streak: <span id="stat-streak">0</span></div>
+                <div>💎 Best Streak: <span id="stat-best-streak">0</span></div>
+                <div>⏱️ Tempo: <span id="stat-time">0 min</span></div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>🧬 Sissy DNA</h3>
+            <div class="dna-bars">
+                <div class="dna-row"><span>Cock Devotion</span><div class="dna-bar"><div class="dna-fill devotion" id="bar-devotion"></div></div><span id="val-devotion">0</span></div>
+                <div class="dna-row"><span>Femininity</span><div class="dna-bar"><div class="dna-fill femininity" id="bar-femininity"></div></div><span id="val-femininity">0</span></div>
+                <div class="dna-row"><span>Obedience</span><div class="dna-bar"><div class="dna-fill obedience" id="bar-obedience"></div></div><span id="val-obedience">0</span></div>
+                <div class="dna-row"><span>Submission</span><div class="dna-bar"><div class="dna-fill submission" id="bar-submission"></div></div><span id="val-submission">0</span></div>
+                <div class="dna-row"><span>Addiction</span><div class="dna-bar"><div class="dna-fill addiction" id="bar-addiction"></div></div><span id="val-addiction">0</span></div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>🏆 Achievements</h3>
+            <div id="achievements-list" class="achievements"></div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💋 SissyGames</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand" onclick="showPage('home')">💋 SissyGames</div>
+    <div class="nav-links">
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('games')">Giochi</a>
+        <a onclick="showPage('sessions')">Sessions</a>
+        <a onclick="showPage('profile')">Profilo</a>
+    </div>
+</nav>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+    <div class="hero">
+        <h1>Benvenuta, <span id="hero-name">Sissy</span> 💕</h1>
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-num" id="home-streak">0</div><div class="stat-label">🔥 Streak</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-xp">0</div><div class="stat-label">✨ XP</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-level">1</div><div class="stat-label">⭐ Livello</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-games">0</div><div class="stat-label">🎮 Giochi</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📝 Check-in Giornaliero</h2>
+        <div id="checkin-form">
+            <p>Come ti senti oggi?</p>
+            <div class="emoji-row">
+                <span class="emoji-opt" onclick="selectMood(this,'submissive')">🥺 Sottomessa</span>
+                <span class="emoji-opt" onclick="selectMood(this,'curious')">🤔 Curiosa</span>
+                <span class="emoji-opt" onclick="selectMood(this,'horny')">🥵 Eccitata</span>
+                <span class="emoji-opt" onclick="selectMood(this,'feminine')">💃 Femminile</span>
+            </div>
+            <p>Indossi qualcosa di femminile?</p>
+            <div class="emoji-row">
+                <span class="emoji-opt" onclick="selectWear(this,'yes')">👙 Sì!</span>
+                <span class="emoji-opt" onclick="selectWear(this,'no')">👖 Non ancora</span>
+            </div>
+            <button class="btn" onclick="submitCheckin()">Conferma Check-in 💋</button>
+        </div>
+        <div id="checkin-done" style="display:none;">
+            <p>✅ Check-in completato! Torna domani 💕</p>
+        </div>
+    </div>
+
+    <button class="btn btn-large" onclick="showPage('games')">Inizia a Giocare 💕</button>
+</div>
+
+<!-- GAMES LIST -->
+<div id="page-games" class="page">
+    <h1>🎮 Giochi</h1>
+    <div class="game-grid">
+        <div class="game-card" onclick="showPage('memory')">
+            <div class="game-icon">🃏</div>
+            <h3>Cock Memory</h3>
+            <p>Trova le coppie nascoste</p>
+        </div>
+        <div class="game-card" onclick="showPage('reaction')">
+            <div class="game-icon">⚡</div>
+            <h3>Reflex Kneel</h3>
+            <p>Testa i tuoi riflessi</p>
+        </div>
+        <div class="game-card" onclick="showPage('catcher')">
+            <div class="game-icon">👅</div>
+            <h3>Cock Catcher</h3>
+            <p>Cattura tutto con la bocca</p>
+        </div>
+        <div class="game-card" onclick="showPage('sorter')">
+            <div class="game-icon">📏</div>
+            <h3>Size Sorter</h3>
+            <p>Ordina per dimensione</p>
+        </div>
+        <div class="game-card" onclick="showPage('mantra')">
+            <div class="game-icon">⌨️</div>
+            <h3>Mantra Typer</h3>
+            <p>Scrivi i tuoi mantra</p>
+        </div>
+        <div class="game-card" onclick="showPage('gaze')">
+            <div class="game-icon">👁️</div>
+            <h3>Gaze Lock</h3>
+            <p>Mantieni lo sguardo fisso</p>
+        </div>
+        <div class="game-card" onclick="showPage('quiz')">
+            <div class="game-icon">🧠</div>
+            <h3>Cock Quiz</h3>
+            <p>Quanto ne sai davvero?</p>
+        </div>
+        <div class="game-card" onclick="showPage('sizeguess')">
+            <div class="game-icon">📐</div>
+            <h3>Size Guess</h3>
+            <p>Indovina la taglia dalla descrizione</p>
+        </div>
+        <div class="game-card" onclick="showPage('alphaprofile')">
+            <div class="game-icon">👑</div>
+            <h3>Alpha Profile</h3>
+            <p>Studia e adora i profili alpha</p>
+        </div>
+        <div class="game-card" onclick="showPage('confession')">
+            <div class="game-icon">💋</div>
+            <h3>Cock Confession</h3>
+            <p>Confessa i tuoi desideri più profondi</p>
+        </div>
+        <div class="game-card" onclick="showPage('worship')">
+            <div class="game-icon">🔤</div>
+            <h3>Worship Words</h3>
+            <p>Completa le frasi di adorazione</p>
+        </div>
+    </div>
+</div>
+
+<!-- COCK MEMORY -->
+<div id="page-memory" class="page">
+    <h1>🃏 Cock Memory</h1>
+    <div id="memory-difficulty" class="card">
+        <h3>Scegli la difficoltà:</h3>
+        <button class="btn" onclick="startMemory(4)">4×4 Facile (8 coppie)</button>
+        <button class="btn" onclick="startMemory(6)">6×6 Medio (18 coppie)</button>
+        <button class="btn" onclick="startMemory(8)">8×8 Difficile (32 coppie)</button>
+    </div>
+    <div class="game-stats">
+        <span id="memory-moves">Mosse: 0</span>
+        <span id="memory-pairs">Coppie: 0/0</span>
+        <span id="memory-timer">Tempo: 0s</span>
+    </div>
+    <p id="memory-msg" class="game-msg"></p>
+    <div id="memory-board" class="memory-grid"></div>
+    <div id="memory-result" class="card result-card" style="display:none;">
+        <h2 id="memory-result-title"></h2>
+        <p id="memory-result-text"></p>
+        <p class="xp-text" id="memory-result-xp"></p>
+        <button class="btn" onclick="resetMemory()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="resetMemory();showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- REFLEX KNEEL -->
+<div id="page-reaction" class="page">
+    <h1>⚡ Reflex Kneel</h1>
+    <div id="reaction-start" class="card">
+        <p>Quando vedi 👑 KNEEL 👑 — clicca più veloce che puoi!</p>
+        <button class="btn" onclick="startReaction()">Inizia!</button>
+    </div>
+    <div id="reaction-wait" class="reaction-screen wait" style="display:none;">
+        <h2>⏳ Aspetta...</h2>
+        <p>Non cliccare ancora!</p>
+    </div>
+    <div id="reaction-go" class="reaction-screen go" style="display:none;" onclick="clickReaction()">
+        <h1>👑 KNEEL! 👑</h1>
+        <p>CLICCA ORA!</p>
+    </div>
+    <div id="reaction-early" class="card" style="display:none;">
+        <h2>Troppo presto! 😤</h2>
+        <p>Una buona sissy sa aspettare il comando!</p>
+        <button class="btn" onclick="startReaction()">Riprova</button>
+    </div>
+    <div id="reaction-result" class="card" style="display:none;">
+        <h2>⏱️ <span id="reaction-time-text"></span></h2>
+        <p id="reaction-comment"></p>
+        <p class="xp-text" id="reaction-xp"></p>
+        <p id="reaction-history" class="small-text"></p>
+        <button class="btn" onclick="startReaction()">Riprova</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- COCK CATCHER -->
+<div id="page-catcher" class="page">
+    <h1>👅 Cock Catcher</h1>
+    <div id="catcher-start" class="card">
+        <p>Muovi la bocca 👄 per catturare i 🍆 e evita le ❌!</p>
+        <button class="btn" onclick="startCatcher()">Gioca!</button>
+    </div>
+    <div class="game-stats">
+        <span id="catcher-score">Score: 0</span>
+        <span id="catcher-combo">Combo: 0</span>
+        <span id="catcher-timer">Tempo: 60s</span>
+    </div>
+    <canvas id="catcher-canvas" width="400" height="500" style="display:none;max-width:100%;border-radius:16px;background:#1a0015;"></canvas>
+    <div id="catcher-result" class="card" style="display:none;">
+        <h2>Risultato 👅</h2>
+        <p id="catcher-result-text"></p>
+        <p class="xp-text" id="catcher-xp"></p>
+        <button class="btn" onclick="startCatcher()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- SIZE SORTER -->
+<div id="page-sorter" class="page">
+    <h1>📏 Size Sorter</h1>
+    <div id="sorter-intro" class="card">
+        <p>Ordina i cazzi dal più piccolo al più grande. Clicca nell'ordine corretto!</p>
+        <button class="btn" onclick="startSorter()">Inizia!</button>
+    </div>
+    <div id="sorter-game" style="display:none;">
+        <p>Clicca in ordine dal più piccolo al più grande:</p>
+        <div id="sorter-items" class="sorter-grid"></div>
+        <div id="sorter-order" class="sorter-order"></div>
+        <button id="sorter-check" class="btn" style="display:none;" onclick="checkSorter()">Verifica Ordine ✅</button>
+    </div>
+    <div id="sorter-result" class="card" style="display:none;">
+        <h2 id="sorter-result-title"></h2>
+        <p id="sorter-result-text"></p>
+        <p class="xp-text" id="sorter-xp"></p>
+        <button class="btn" onclick="startSorter()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- MANTRA TYPER -->
+<div id="page-mantra" class="page">
+    <h1>⌨️ Mantra Typer</h1>
+    <div id="mantra-start" class="card">
+        <p>Scrivi i mantra il più velocemente possibile! Hai 60 secondi.</p>
+        <button class="btn" onclick="startMantra()">Inizia!</button>
+    </div>
+    <div id="mantra-game" style="display:none;">
+        <div class="game-stats">
+            <span id="mantra-timer">Tempo: 60s</span>
+            <span id="mantra-score">Score: 0</span>
+            <span>Completati: <span id="mantra-completed">0</span></span>
+        </div>
+        <div class="mantra-target" id="mantra-target"></div>
+        <input type="text" id="mantra-input" class="mantra-input" placeholder="Scrivi qui..." autocomplete="off">
+        <p id="mantra-feedback" class="game-msg"></p>
+    </div>
+    <div id="mantra-result" class="card" style="display:none;">
+        <h2>Risultato ⌨️</h2>
+        <p id="mantra-result-text"></p>
+        <p class="xp-text" id="mantra-xp"></p>
+        <button class="btn" onclick="startMantra()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- GAZE LOCK -->
+<div id="page-gaze" class="page">
+    <h1>👁️ Gaze Lock</h1>
+    <div id="gaze-start" class="card">
+        <p>Fissa lo schermo senza distogliere lo sguardo. Clicca il bottone quando appare per confermare.</p>
+        <button class="btn" onclick="startGaze()">Inizia</button>
+    </div>
+    <div id="gaze-game" class="gaze-screen" style="display:none;">
+        <div id="gaze-center" class="gaze-center">
+            <div class="gaze-symbol">👑</div>
+            <div class="gaze-text" id="gaze-affirmation"></div>
+        </div>
+        <div id="gaze-timer" class="gaze-timer">0:00</div>
+        <button id="gaze-btn" class="btn gaze-confirm" style="display:none;" onclick="gazeConfirm()">👁️ Sto ancora guardando</button>
+    </div>
+    <div id="gaze-result" class="card" style="display:none;">
+        <h2 id="gaze-result-title"></h2>
+        <p id="gaze-result-text"></p>
+        <p class="xp-text" id="gaze-xp"></p>
+        <button class="btn" onclick="startGaze()">Riprova</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- ===== NUOVI GIOCHI ===== -->
+
+<!-- COCK QUIZ -->
+<div id="page-quiz" class="page">
+    <h1>🧠 Cock Quiz</h1>
+    <div id="quiz-start" class="card">
+        <p>Quanto ne sai sui cazzi? 10 domande per testare la tua conoscenza!</p>
+        <button class="btn" onclick="startQuiz()">Inizia il Quiz!</button>
+    </div>
+    <div id="quiz-game" style="display:none;">
+        <div class="game-stats">
+            <span id="quiz-progress">Domanda 1/10</span>
+            <span id="quiz-score-display">Score: 0</span>
+        </div>
+        <div class="card" id="quiz-question-card">
+            <h3 id="quiz-category"></h3>
+            <p id="quiz-question" class="quiz-question"></p>
+            <div id="quiz-options" class="quiz-options"></div>
+            <p id="quiz-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="quiz-result" class="card" style="display:none;">
+        <h2 id="quiz-result-title"></h2>
+        <p id="quiz-result-text"></p>
+        <div id="quiz-result-detail"></div>
+        <p class="xp-text" id="quiz-xp"></p>
+        <button class="btn" onclick="startQuiz()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- SIZE GUESS -->
+<div id="page-sizeguess" class="page">
+    <h1>📐 Size Guess</h1>
+    <div id="sg-start" class="card">
+        <p>Leggi la descrizione del cazzo e indovina la lunghezza in cm. Più sei precisa, più punti guadagni!</p>
+        <button class="btn" onclick="startSizeGuess()">Inizia!</button>
+    </div>
+    <div id="sg-game" style="display:none;">
+        <div class="game-stats">
+            <span id="sg-round">Round 1/8</span>
+            <span id="sg-score-display">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="sg-description" class="quiz-question"></p>
+            <div class="sg-slider-container">
+                <input type="range" id="sg-slider" min="8" max="30" value="15" oninput="updateSGSlider()">
+                <div id="sg-slider-value" class="sg-value">15 cm</div>
+            </div>
+            <button class="btn" id="sg-submit" onclick="submitSizeGuess()">Conferma 💋</button>
+            <p id="sg-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="sg-result" class="card" style="display:none;">
+        <h2 id="sg-result-title"></h2>
+        <p id="sg-result-text"></p>
+        <p class="xp-text" id="sg-xp"></p>
+        <button class="btn" onclick="startSizeGuess()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- ALPHA PROFILE -->
+<div id="page-alphaprofile" class="page">
+    <h1>👑 Alpha Profile</h1>
+    <div id="ap-start" class="card">
+        <p>Studia il profilo dell'Alpha. Memorizza i dettagli. Poi rispondi alle domande su di lui.</p>
+        <button class="btn" onclick="startAlphaProfile()">Mostrami l'Alpha 👑</button>
+    </div>
+    <div id="ap-study" style="display:none;">
+        <div class="card alpha-card">
+            <h2 id="ap-name"></h2>
+            <div id="ap-details" class="alpha-details"></div>
+            <div id="ap-timer-bar" class="timer-bar"><div id="ap-timer-fill" class="timer-fill"></div></div>
+            <p id="ap-study-msg" class="game-msg">Memorizza tutto... ⏳</p>
+        </div>
+    </div>
+    <div id="ap-quiz" style="display:none;">
+        <div class="game-stats">
+            <span id="ap-q-progress">Domanda 1/5</span>
+            <span id="ap-q-score">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="ap-question" class="quiz-question"></p>
+            <div id="ap-options" class="quiz-options"></div>
+            <p id="ap-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="ap-worship" style="display:none;">
+        <div class="card">
+            <h2>Scrivi la tua adorazione 💋</h2>
+            <p id="ap-worship-prompt"></p>
+            <textarea id="ap-worship-text" class="worship-textarea" placeholder="Scrivi qui la tua adorazione..." rows="5"></textarea>
+            <button class="btn" onclick="submitWorship()">Invia Adorazione 💕</button>
+        </div>
+    </div>
+    <div id="ap-result" class="card" style="display:none;">
+        <h2 id="ap-result-title"></h2>
+        <p id="ap-result-text"></p>
+        <p class="xp-text" id="ap-xp"></p>
+        <button class="btn" onclick="startAlphaProfile()">Prossimo Alpha</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- COCK CONFESSION -->
+<div id="page-confession" class="page">
+    <h1>💋 Cock Confession</h1>
+    <div id="conf-start" class="card">
+        <p>Rispondi sinceramente alle domande. Più sei onesta, più punti guadagni. Nessuno giudica qui. 💕</p>
+        <button class="btn" onclick="startConfession()">Inizia la Confessione</button>
+    </div>
+    <div id="conf-game" style="display:none;">
+        <div class="game-stats">
+            <span id="conf-progress">Domanda 1/10</span>
+            <span id="conf-score-display">Punti: 0</span>
+        </div>
+        <div class="card">
+            <p id="conf-question" class="quiz-question"></p>
+            <div id="conf-options" class="quiz-options"></div>
+            <p id="conf-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="conf-result" class="card" style="display:none;">
+        <h2 id="conf-result-title"></h2>
+        <p id="conf-result-text"></p>
+        <div id="conf-result-profile"></div>
+        <p class="xp-text" id="conf-xp"></p>
+        <button class="btn" onclick="startConfession()">Confessa Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- WORSHIP WORDS -->
+<div id="page-worship" class="page">
+    <h1>🔤 Worship Words</h1>
+    <div id="ww-start" class="card">
+        <p>Completa le frasi di adorazione con la parola giusta. Allena il tuo vocabolario devoto!</p>
+        <button class="btn" onclick="startWorshipWords()">Inizia!</button>
+    </div>
+    <div id="ww-game" style="display:none;">
+        <div class="game-stats">
+            <span id="ww-progress">Frase 1/10</span>
+            <span id="ww-score-display">Score: 0</span>
+        </div>
+        <div class="card">
+            <p id="ww-sentence" class="quiz-question"></p>
+            <div id="ww-options" class="quiz-options"></div>
+            <p id="ww-feedback" class="game-msg"></p>
+        </div>
+    </div>
+    <div id="ww-result" class="card" style="display:none;">
+        <h2 id="ww-result-title"></h2>
+        <p id="ww-result-text"></p>
+        <p class="xp-text" id="ww-xp"></p>
+        <button class="btn" onclick="startWorshipWords()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- SESSIONS LIST -->
+<div id="page-sessions" class="page">
+    <h1>🧠 Sessioni BM</h1>
+    <div class="game-grid">
+        <div class="game-card session-card" onclick="startSession(1)">
+            <div class="game-icon">👁️</div>
+            <h3>Session 1: First Gaze</h3>
+            <p>Il primo sguardo. Scopri la tua reazione.</p>
+        </div>
+        <div class="game-card session-card" onclick="startSession(2)">
+            <div class="game-icon">📏</div>
+            <h3>Session 2: Size Acceptance</h3>
+            <p>Accetta le differenze. Trova il tuo posto.</p>
+        </div>
+        <div class="game-card session-card" onclick="startSession(3)">
+            <div class="game-icon">🙇</div>
+            <h3>Session 3: Surrender</h3>
+            <p>La resa completa. Il potere della sottomissione.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SESSION PLAYER -->
+<div id="page-session-player" class="page">
+    <div class="session-screen">
+        <div id="session-bg" class="session-bg"></div>
+        <div class="session-content">
+            <p id="session-text" class="session-text"></p>
+            <div class="session-progress"><div id="session-bar" class="session-bar"></div></div>
+        </div>
+        <button class="btn btn-secondary session-exit" onclick="exitSession()">✕ Esci</button>
+    </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page">
+    <h1>💜 Il Tuo Profilo</h1>
+    <div id="profile-setup" class="card">
+        <h3>Come vuoi essere chiamata?</h3>
+        <input type="text" id="sissy-name-input" class="mantra-input" placeholder="Il tuo nome sissy...">
+        <button class="btn" onclick="saveProfile()">Salva 💋</button>
+    </div>
+    <div id="profile-view" style="display:none;">
+        <div class="card">
+            <h2 id="profile-name">Sissy</h2>
+            <p>Titolo: <span id="profile-title">Curious</span></p>
+        </div>
+        <div class="card">
+            <h3>📊 Statistiche</h3>
+            <div class="stats-grid">
+                <div>✨ XP: <span id="stat-xp">0</span></div>
+                <div>⭐ Livello: <span id="stat-level">1</span></div>
+                <div>🎮 Giochi: <span id="stat-games">0</span></div>
+                <div>🧠 Sessioni: <span id="stat-sessions">0</span></div>
+                <div>🔥 Streak: <span id="stat-streak">0</span></div>
+                <div>💎 Best Streak: <span id="stat-best-streak">0</span></div>
+                <div>⏱️ Tempo: <span id="stat-time">0 min</span></div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>🧬 Sissy DNA</h3>
+            <div class="dna-bars">
+                <div class="dna-row"><span>Cock Devotion</span><div class="dna-bar"><div class="dna-fill devotion" id="bar-devotion"></div></div><span id="val-devotion">0</span></div>
+                <div class="dna-row"><span>Femininity</span><div class="dna-bar"><div class="dna-fill femininity" id="bar-femininity"></div></div><span id="val-femininity">0</span></div>
+                <div class="dna-row"><span>Obedience</span><div class="dna-bar"><div class="dna-fill obedience" id="bar-obedience"></div></div><span id="val-obedience">0</span></div>
+                <div class="dna-row"><span>Submission</span><div class="dna-bar"><div class="dna-fill submission" id="bar-submission"></div></div><span id="val-submission">0</span></div>
+                <div class="dna-row"><span>Addiction</span><div class="dna-bar"><div class="dna-fill addiction" id="bar-addiction"></div></div><span id="val-addiction">0</span></div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>🏆 Achievements</h3>
+            <div id="achievements-list" class="achievements"></div>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
