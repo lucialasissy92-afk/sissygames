@@ -576,3 +576,253 @@ body {
     resize: vertical;
     min-height: 120px;
     margin
+
+    /* ============ PENSA CON LA FICA ============ */
+.fica-tag {
+    display: inline-block;
+    background: rgba(255,105,180,0.2);
+    color: var(--pink);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.fica-story-text {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.9);
+}
+
+.fica-detail-text {
+    color: var(--pink-light);
+    border-left: 3px solid var(--pink);
+    padding-left: 15px;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.fica-hot-text {
+    color: #ff6b9d;
+    border-left: 3px solid #ff3366;
+    padding-left: 15px;
+    margin-top: 15px;
+    font-weight: 600;
+    animation: hotPulse 2s ease-in-out infinite;
+}
+
+@keyframes hotPulse {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 1; }
+}
+
+.fica-tension {
+    font-weight: 600;
+    color: var(--pink-light);
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.fica-detail-btn {
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+    margin: 5px !important;
+    background: rgba(255,105,180,0.15) !important;
+    border: 1px solid var(--pink) !important;
+}
+
+.fica-detail-btn:hover {
+    background: var(--pink) !important;
+}
+
+.fica-arousal-container {
+    padding: 20px 0;
+}
+
+.fica-arousal-container input[type="range"] {
+    width: 100%;
+    height: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, #666, #ff69b4, #ff1493, #ff0066);
+    border-radius: 5px;
+    outline: none;
+}
+
+.fica-arousal-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255,105,180,0.5);
+}
+
+.fica-arousal-container input[type="range"]::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+.fica-arousal-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.fica-arousal-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--pink);
+}
+
+.fica-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fica-comment {
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(255,105,180,0.08);
+    border-radius: 10px;
+    font-style: italic;
+    color: var(--pink-light);
+    font-size: 0.95rem;
+}
+
+/* PHONE MESSAGE */
+.fica-phone {
+    background: #1a1a2e;
+    border: 1px solid rgba(255,105,180,0.2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.fica-phone-header {
+    background: rgba(255,105,180,0.1);
+    padding: 12px 20px;
+    font-weight: 700;
+    color: var(--pink);
+    font-size: 0.9rem;
+}
+
+.fica-phone-bubble {
+    background: rgba(255,255,255,0.06);
+    margin: 12px 15px;
+    padding: 14px 18px;
+    border-radius: 18px 18px 18px 4px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 85%;
+}
+
+.fica-bubble-sent {
+    background: rgba(255,105,180,0.2);
+    margin-left: auto;
+    margin-right: 15px;
+    border-radius: 18px 18px 4px 18px;
+    text-align: right;
+    color: var(--pink-light);
+}
+
+.fica-msg-choices {
+    padding: 10px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fica-msg-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,105,180,0.3);
+    color: var(--white);
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9rem;
+    text-align: left;
+    transition: all 0.3s;
+}
+
+.fica-msg-btn:hover {
+    border-color: var(--pink);
+    background: rgba(255,105,180,0.1);
+}
+
+/* REPORT */
+.fica-profile-badge {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--pink);
+    padding: 15px;
+    background: rgba(255,105,180,0.1);
+    border-radius: 12px;
+    margin: 15px auto;
+    max-width: 400px;
+}
+
+.fica-report-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.fica-report-grid div {
+    background: rgba(255,255,255,0.04);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.fica-report-grid .fica-stat-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--pink);
+}
+
+.fica-report-grid .fica-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+.fica-final-comment {
+    background: rgba(255,105,180,0.08);
+    border-left: 4px solid var(--pink);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--pink-light);
+}
+
+.fica-timing-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.9rem;
+}
+
+.fica-timing-slow {
+    color: var(--pink);
+    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .fica-report-grid { grid-template-columns: 1fr; }
+    .fica-story-text { font-size: 0.95rem; }
+}
