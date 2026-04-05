@@ -1,6 +1,40 @@
 // ==========================================
-//  SISSY GAMES — MAIN APPLICATION
+//  SISSY GAMES — MAIN APPLICATION v2
+//  Con supporto immagini per ogni gioco
 // ==========================================
+
+// ============ CONFIGURAZIONE IMMAGINI ============
+const IMAGES = {
+    memory: Array.from({length: 32}, (_, i) => `img/memory/${String(i+1).padStart(2,'0')}.jpg`),
+    catcher: {
+        good: Array.from({length: 10}, (_, i) => `img/catcher/good${i+1}.jpg`),
+        bad: Array.from({length: 5}, (_, i) => `img/catcher/bad${i+1}.jpg`),
+    },
+    gaze: Array.from({length: 10}, (_, i) => `img/gaze/${String(i+1).padStart(2,'0')}.jpg`),
+    sorter: {
+        small: Array.from({length: 3}, (_, i) => `img/sorter/small${i+1}.jpg`),
+        medium: Array.from({length: 3}, (_, i) => `img/sorter/medium${i+1}.jpg`),
+        big: Array.from({length: 3}, (_, i) => `img/sorter/big${i+1}.jpg`),
+        huge: Array.from({length: 3}, (_, i) => `img/sorter/huge${i+1}.jpg`),
+    },
+    reaction: Array.from({length: 5}, (_, i) => `img/reaction/${String(i+1).padStart(2,'0')}.jpg`),
+    mantra: Array.from({length: 3}, (_, i) => `img/mantra/bg${i+1}.jpg`),
+    sessions: {
+        1: 'img/sessions/session1.jpg',
+        2: 'img/sessions/session2.jpg',
+        3: 'img/sessions/session3.jpg',
+    }
+};
+
+// Verifica se un'immagine esiste
+function imgExists(url) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = url;
+    });
+}
 
 // ============ DATA MANAGEMENT ============
 const DB = {
@@ -96,7 +130,6 @@ function checkAchievements() {
 
 // ============ UI UPDATES ============
 function updateAllUI() {
-    // Home stats
     const els = {
         'hero-name': profile.name || 'Sissy',
         'home-streak': profile.streak,
@@ -109,7 +142,6 @@ function updateAllUI() {
         if (el) el.textContent = val;
     });
 
-    // Profile
     const pName = document.getElementById('profile-name');
     if (pName) pName.textContent = profile.name || 'Sissy';
 
@@ -119,7 +151,6 @@ function updateAllUI() {
         pTitle.textContent = titles[Math.min(Math.floor(profile.level / 3), titles.length - 1)];
     }
 
-    // Profile stats
     const stats = {
         'stat-xp': profile.xp,
         'stat-level': profile.level,
@@ -135,7 +166,6 @@ function updateAllUI() {
         if (el) el.textContent = val;
     });
 
-    // DNA bars
     Object.keys(profile.dna).forEach(key => {
         const bar = document.getElementById('bar-' + key);
         const val = document.getElementById('val-' + key);
@@ -143,7 +173,6 @@ function updateAllUI() {
         if (val) val.textContent = Math.floor(profile.dna[key]);
     });
 
-    // Profile setup/view toggle
     const setup = document.getElementById('profile-setup');
     const view = document.getElementById('profile-view');
     if (setup && view) {
@@ -156,7 +185,6 @@ function updateAllUI() {
         }
     }
 
-    // Achievements
     const achList = document.getElementById('achievements-list');
     if (achList) {
         achList.innerHTML = ACHIEVEMENTS.map(a => {
@@ -165,7 +193,6 @@ function updateAllUI() {
         }).join('');
     }
 
-    // Checkin
     const today = new Date().toDateString();
     if (profile.checkinToday === today) {
         const cf = document.getElementById('checkin-form');
@@ -229,7 +256,7 @@ function submitCheckin() {
     document.getElementById('checkin-done').style.display = 'block';
 }
 
-// ============ GAME 1: COCK MEMORY ============
+// ============ GAME 1: COCK MEMORY (CON IMMAGINI) ============
 let memoryState = { cards: [], flipped: [], matched: 0, total: 0, moves: 0, timer: 0, interval: null, locked: false };
 
 const MEMORY_SYMBOLS = ['🍆', '🍌', '🌶️', '🥒', '🍄', '🌭', '🏛️', '🗼', '🚀', '💄', '👠', '💎', '🔑', '🕯️', '👅', '💋', '🍑', '🍒', '👑', '⛓️', '🎀', '💕', '🖤', '🔥', '💦', '🫦', '🩱', '🧴', '💜', '🎭', '🪭', '🛁'];
@@ -239,8 +266,21 @@ function startMemory(size) {
     document.getElementById('memory-result').style.display = 'none';
 
     const pairs = (size * size) / 2;
-    const symbols = MEMORY_SYMBOLS.slice(0, pairs);
-    let cards = [...symbols, ...symbols];
+    
+    // Mescola le immagini e prendi quelle che servono
+    const shuffledImages = [...IMAGES.memory].sort(() => Math.random() - 0.5);
+    const selectedItems = [];
+    
+    for (let i = 0; i < pairs; i++) {
+        if (i < shuffledImages.length) {
+            selectedItems.push({ type: 'img', src: shuffledImages[i] });
+        } else {
+            selectedItems.push({ type: 'emoji', src: MEMORY_SYMBOLS[i % MEMORY_SYMBOLS.length] });
+        }
+    }
+    
+    // Duplica per fare le coppie e mescola
+    let cards = [...selectedItems, ...selectedItems];
     cards = cards.sort(() => Math.random() - 0.5);
 
     memoryState = { cards, flipped: [], matched: 0, total: pairs, moves: 0, timer: 0, interval: null, locked: false, size };
@@ -248,16 +288,25 @@ function startMemory(size) {
     const board = document.getElementById('memory-board');
     board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
     board.style.display = 'grid';
-    board.innerHTML = cards.map((sym, i) => `
-        <div class="memory-card" onclick="flipCard(${i})" id="mc-${i}">
-            <span class="card-back">💋</span>
-            <span class="card-front">${sym}</span>
-        </div>
-    `).join('');
+    
+    board.innerHTML = cards.map((item, i) => {
+        let frontContent;
+        if (item.type === 'img') {
+            frontContent = `<img src="${item.src}" style="width:100%;height:100%;object-fit:cover;border-radius:10px;" onerror="this.parentElement.innerHTML='🍆'">`;
+        } else {
+            frontContent = item.src;
+        }
+        return `
+            <div class="memory-card" onclick="flipCard(${i})" id="mc-${i}">
+                <span class="card-back">💋</span>
+                <span class="card-front">${frontContent}</span>
+            </div>
+        `;
+    }).join('');
 
     memoryState.interval = setInterval(() => {
         memoryState.timer++;
-        document.getElementById('memory-timer').textContent = `Tempo: ${memoryState.timer}s`;
+        document.getElementById('memory-timer').textContent = 'Tempo: ' + memoryState.timer + 's';
     }, 1000);
 
     updateMemoryUI();
@@ -276,7 +325,12 @@ function flipCard(i) {
         memoryState.locked = true;
         const [a, b] = memoryState.flipped;
 
-        if (memoryState.cards[a] === memoryState.cards[b]) {
+        // Confronta per src
+        const cardA = memoryState.cards[a];
+        const cardB = memoryState.cards[b];
+        const isMatch = cardA.type === cardB.type && cardA.src === cardB.src;
+
+        if (isMatch) {
             document.getElementById('mc-' + a).classList.add('matched');
             document.getElementById('mc-' + b).classList.add('matched');
             memoryState.matched++;
@@ -286,7 +340,8 @@ function flipCard(i) {
             const messages = [
                 "Good girl! 💋", "Brava! I tuoi occhi sono attenti 👀",
                 "Perfetto! Stai imparando bene 💕", "Ottimo match! 🎀",
-                "I tuoi occhi sanno dove guardare 😍", "Non ti sfugge niente! 👅"
+                "I tuoi occhi sanno dove guardare 😍", "Non ti sfugge niente! 👅",
+                "Li riconosci tutti ormai... 🥵", "Memoria perfetta! 🧠"
             ];
             document.getElementById('memory-msg').textContent = messages[Math.floor(Math.random() * messages.length)];
 
@@ -307,8 +362,8 @@ function flipCard(i) {
 }
 
 function updateMemoryUI() {
-    document.getElementById('memory-moves').textContent = `Mosse: ${memoryState.moves}`;
-    document.getElementById('memory-pairs').textContent = `Coppie: ${memoryState.matched}/${memoryState.total}`;
+    document.getElementById('memory-moves').textContent = 'Mosse: ' + memoryState.moves;
+    document.getElementById('memory-pairs').textContent = 'Coppie: ' + memoryState.matched + '/' + memoryState.total;
 }
 
 function endMemory() {
@@ -324,11 +379,11 @@ function endMemory() {
 
     document.getElementById('memory-result').style.display = 'block';
     document.getElementById('memory-result-text').textContent =
-        `${memoryState.moves} mosse in ${memoryState.timer} secondi. Efficienza: ${efficiency}%`;
-    document.getElementById('memory-result-xp').textContent = `+${xp} XP`;
+        memoryState.moves + ' mosse in ' + memoryState.timer + ' secondi. Efficienza: ' + efficiency + '%';
+    document.getElementById('memory-result-xp').textContent = '+' + xp + ' XP';
 
     const titleEl = document.getElementById('memory-result-title');
-    if (efficiency >= 80) titleEl.textContent = 'Perfetto! I tuoi occhi sono addestrati! 💋';
+    if (efficiency >= 80) titleEl.textContent = 'Perfetto! Li riconosci tutti! 💋';
     else if (efficiency >= 50) titleEl.textContent = 'Brava! Stai migliorando! 💕';
     else titleEl.textContent = 'Continua a praticare! 🎀';
 }
@@ -342,7 +397,7 @@ function resetMemory() {
     document.getElementById('memory-msg').textContent = '';
 }
 
-// ============ GAME 2: REFLEX KNEEL ============
+// ============ GAME 2: REFLEX KNEEL (CON IMMAGINI) ============
 let reactionState = { timeout: null, startTime: 0, history: [] };
 
 function startReaction() {
@@ -355,7 +410,16 @@ function startReaction() {
     const delay = 2000 + Math.random() * 5000;
     reactionState.timeout = setTimeout(() => {
         document.getElementById('reaction-wait').style.display = 'none';
-        document.getElementById('reaction-go').style.display = 'flex';
+        
+        // Mostra immagine casuale
+        const goScreen = document.getElementById('reaction-go');
+        const randomImg = IMAGES.reaction[Math.floor(Math.random() * IMAGES.reaction.length)];
+        goScreen.innerHTML = `
+            <img src="${randomImg}" style="max-width:300px;max-height:300px;border-radius:16px;border:3px solid #ff69b4;margin-bottom:20px;" onerror="this.style.display='none'">
+            <h1>👑 KNEEL! 👑</h1>
+            <p>CLICCA ORA!</p>
+        `;
+        goScreen.style.display = 'flex';
         reactionState.startTime = Date.now();
     }, delay);
 
@@ -380,12 +444,12 @@ function clickReaction() {
     else if (time < 800) { comment = "Puoi fare meglio. Una sissy deve reagire più veloce. 😤"; xpAmount = 20; }
     else { comment = "Troppo lenta! Devi allenarti di più! 🔥"; xpAmount = 10; }
 
-    document.getElementById('reaction-time-text').textContent = `${time} ms`;
+    document.getElementById('reaction-time-text').textContent = time + ' ms';
     document.getElementById('reaction-comment').textContent = comment;
-    document.getElementById('reaction-xp').textContent = `+${xpAmount} XP`;
+    document.getElementById('reaction-xp').textContent = '+' + xpAmount + ' XP';
 
     const historyHTML = reactionState.history.slice(-5).map((t, i) =>
-        `Tentativo ${i + 1}: ${t}ms`
+        'Tentativo ' + (i + 1) + ': ' + t + 'ms'
     ).join(' | ');
     document.getElementById('reaction-history').textContent = historyHTML;
 
@@ -395,8 +459,18 @@ function clickReaction() {
     addXP(xpAmount, 'Reflex Kneel');
 }
 
-// ============ GAME 3: COCK CATCHER ============
-let catcherState = { running: false, score: 0, combo: 0, items: [], playerX: 200, animFrame: null, timeLeft: 60, timerInterval: null };
+// ============ GAME 3: COCK CATCHER (CON IMMAGINI) ============
+let catcherState = { running: false, score: 0, combo: 0, items: [], playerX: 200, animFrame: null, timeLeft: 60, timerInterval: null, loadedImages: {} };
+
+// Pre-carica immagini per il catcher
+function preloadCatcherImages() {
+    const allImgs = [...IMAGES.catcher.good, ...IMAGES.catcher.bad];
+    allImgs.forEach(src => {
+        const img = new Image();
+        img.src = src;
+        catcherState.loadedImages[src] = img;
+    });
+}
 
 function startCatcher() {
     const canvas = document.getElementById('catcher-canvas');
@@ -405,7 +479,9 @@ function startCatcher() {
     document.getElementById('catcher-start').style.display = 'none';
     document.getElementById('catcher-result').style.display = 'none';
 
-    catcherState = { running: true, score: 0, combo: 0, items: [], playerX: canvas.width / 2, animFrame: null, timeLeft: 60, timerInterval: null };
+    catcherState = { running: true, score: 0, combo: 0, items: [], playerX: canvas.width / 2, animFrame: null, timeLeft: 60, timerInterval: null, loadedImages: catcherState.loadedImages };
+
+    preloadCatcherImages();
 
     canvas.onmousemove = (e) => {
         const rect = canvas.getBoundingClientRect();
@@ -420,19 +496,36 @@ function startCatcher() {
 
     catcherState.timerInterval = setInterval(() => {
         catcherState.timeLeft--;
-        document.getElementById('catcher-timer').textContent = `Tempo: ${catcherState.timeLeft}s`;
+        document.getElementById('catcher-timer').textContent = 'Tempo: ' + catcherState.timeLeft + 's';
         if (catcherState.timeLeft <= 0) endCatcher();
     }, 1000);
+
+    const goodImgs = IMAGES.catcher.good;
+    const badImgs = IMAGES.catcher.bad;
+    const goodEmojis = ['🍆', '🍌', '🌶️', '🥒', '🍄'];
+    const badEmojis = ['❌', '💀', '🚫'];
 
     function spawnItem() {
         if (!catcherState.running) return;
         const good = Math.random() > 0.25;
+        
+        let emoji, imgSrc = null;
+        if (good) {
+            imgSrc = goodImgs[Math.floor(Math.random() * goodImgs.length)];
+            emoji = goodEmojis[Math.floor(Math.random() * goodEmojis.length)];
+        } else {
+            imgSrc = badImgs[Math.floor(Math.random() * badImgs.length)];
+            emoji = badEmojis[Math.floor(Math.random() * badEmojis.length)];
+        }
+
         catcherState.items.push({
-            x: Math.random() * (canvas.width - 30),
-            y: -30,
+            x: Math.random() * (canvas.width - 40),
+            y: -40,
             good: good,
-            emoji: good ? ['🍆', '🍌', '🌶️', '🥒', '🍄'][Math.floor(Math.random() * 5)] : '❌',
-            speed: 2 + Math.random() * 3
+            emoji: emoji,
+            imgSrc: imgSrc,
+            speed: 2 + Math.random() * 3,
+            size: 40
         });
         setTimeout(spawnItem, 400 + Math.random() * 800);
     }
@@ -441,19 +534,27 @@ function startCatcher() {
         if (!catcherState.running) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw player
+        // Disegna player (bocca)
         ctx.font = '35px serif';
         ctx.textAlign = 'center';
         ctx.fillText('👄', catcherState.playerX, canvas.height - 20);
 
         // Update & draw items
-        catcherState.items.forEach((item, i) => {
+        for (let i = catcherState.items.length - 1; i >= 0; i--) {
+            const item = catcherState.items[i];
             item.y += item.speed;
-            ctx.font = '28px serif';
-            ctx.fillText(item.emoji, item.x + 15, item.y + 28);
+            
+            // Prova a disegnare immagine, fallback a emoji
+            const img = catcherState.loadedImages[item.imgSrc];
+            if (img && img.complete && img.naturalWidth > 0) {
+                ctx.drawImage(img, item.x, item.y, item.size, item.size);
+            } else {
+                ctx.font = '28px serif';
+                ctx.fillText(item.emoji, item.x + item.size/2, item.y + item.size - 5);
+            }
 
             // Catch check
-            if (item.y + 28 >= canvas.height - 40 && Math.abs(item.x + 15 - catcherState.playerX) < 35) {
+            if (item.y + item.size >= canvas.height - 40 && Math.abs(item.x + item.size/2 - catcherState.playerX) < 35) {
                 if (item.good) {
                     catcherState.score += 10 + catcherState.combo * 2;
                     catcherState.combo++;
@@ -462,26 +563,27 @@ function startCatcher() {
                     catcherState.combo = 0;
                 }
                 catcherState.items.splice(i, 1);
-                document.getElementById('catcher-score').textContent = `Score: ${catcherState.score}`;
-                document.getElementById('catcher-combo').textContent = `Combo: ${catcherState.combo}`;
+                document.getElementById('catcher-score').textContent = 'Score: ' + catcherState.score;
+                document.getElementById('catcher-combo').textContent = 'Combo: ' + catcherState.combo;
+                continue;
             }
 
             // Off screen
-            if (item.y > canvas.height + 30) {
+            if (item.y > canvas.height + 40) {
                 if (item.good) catcherState.combo = 0;
                 catcherState.items.splice(i, 1);
             }
-        });
+        }
 
         // Combo messages
         if (catcherState.combo >= 10) {
             ctx.fillStyle = 'rgba(255,105,180,0.8)';
-            ctx.font = 'bold 18px Quicksand';
+            ctx.font = 'bold 18px Quicksand, sans-serif';
             ctx.fillText('🔥 INSATIABLE! 🔥', canvas.width / 2, 30);
             ctx.fillStyle = '#fff';
         } else if (catcherState.combo >= 5) {
             ctx.fillStyle = 'rgba(255,105,180,0.6)';
-            ctx.font = 'bold 16px Quicksand';
+            ctx.font = 'bold 16px Quicksand, sans-serif';
             ctx.fillText('COCK HUNGRY! 👅', canvas.width / 2, 30);
             ctx.fillStyle = '#fff';
         }
@@ -503,8 +605,8 @@ function endCatcher() {
 
     const xp = Math.floor(catcherState.score * 0.5);
     document.getElementById('catcher-result-text').textContent =
-        `Score finale: ${catcherState.score} — Combo massimo: ${catcherState.combo}`;
-    document.getElementById('catcher-xp').textContent = `+${xp} XP`;
+        'Score finale: ' + catcherState.score + ' — Combo massimo: ' + catcherState.combo;
+    document.getElementById('catcher-xp').textContent = '+' + xp + ' XP';
 
     profile.gamesPlayed++;
     addDNA('devotion', Math.min(10, Math.floor(catcherState.score / 50)));
@@ -512,7 +614,7 @@ function endCatcher() {
     addXP(xp, 'Cock Catcher');
 }
 
-// ============ GAME 4: SIZE SORTER ============
+// ============ GAME 4: SIZE SORTER (CON IMMAGINI) ============
 let sorterState = { items: [], selected: [], correct: [] };
 
 function startSorter() {
@@ -521,23 +623,43 @@ function startSorter() {
     document.getElementById('sorter-game').style.display = 'block';
     document.getElementById('sorter-check').style.display = 'none';
 
-    const sizes = [];
+    // Crea items con dimensioni e immagini
+    const categories = [
+        { label: 'small', size: 10 + Math.floor(Math.random() * 3), imgs: IMAGES.sorter.small },
+        { label: 'small', size: 11 + Math.floor(Math.random() * 2), imgs: IMAGES.sorter.small },
+        { label: 'medium', size: 15 + Math.floor(Math.random() * 3), imgs: IMAGES.sorter.medium },
+        { label: 'medium', size: 16 + Math.floor(Math.random() * 2), imgs: IMAGES.sorter.medium },
+        { label: 'big', size: 19 + Math.floor(Math.random() * 3), imgs: IMAGES.sorter.big },
+        { label: 'big', size: 20 + Math.floor(Math.random() * 2), imgs: IMAGES.sorter.big },
+        { label: 'huge', size: 23 + Math.floor(Math.random() * 3), imgs: IMAGES.sorter.huge },
+    ];
+
+    // Prendi 5-7 items random
     const count = 5 + Math.floor(Math.random() * 3);
-    for (let i = 0; i < count; i++) {
-        sizes.push(Math.floor(8 + Math.random() * 20));
-    }
-    // Make sure all unique
-    const unique = [...new Set(sizes)];
-    while (unique.length < count) unique.push(Math.floor(8 + Math.random() * 20));
+    const shuffled = [...categories].sort(() => Math.random() - 0.5).slice(0, count);
+    
+    // Assicurati che le dimensioni siano uniche
+    const usedSizes = new Set();
+    const items = [];
+    shuffled.forEach(cat => {
+        let s = cat.size;
+        while (usedSizes.has(s)) s++;
+        usedSizes.add(s);
+        const img = cat.imgs[Math.floor(Math.random() * cat.imgs.length)];
+        items.push({ size: s, img: img, label: cat.label });
+    });
 
-    const shuffled = [...unique].sort(() => Math.random() - 0.5);
-    const correct = [...unique].sort((a, b) => a - b);
+    const displayOrder = [...items].sort(() => Math.random() - 0.5);
+    const correct = [...items].sort((a, b) => a.size - b.size);
 
-    sorterState = { items: shuffled, selected: [], correct };
+    sorterState = { items: displayOrder, selected: [], correct };
 
     const container = document.getElementById('sorter-items');
-    container.innerHTML = shuffled.map((size, i) => `
-        <div class="sorter-item" onclick="selectSorterItem(${i})" id="si-${i}">${size} cm</div>
+    container.innerHTML = displayOrder.map((item, i) => `
+        <div class="sorter-item" onclick="selectSorterItem(${i})" id="si-${i}" style="padding:10px;text-align:center;">
+            <img src="${item.img}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;display:block;margin:0 auto 8px;" onerror="this.style.display='none'">
+            <div>${item.size} cm</div>
+        </div>
     `).join('');
 
     document.getElementById('sorter-order').innerHTML = '';
@@ -550,7 +672,7 @@ function selectSorterItem(i) {
     sorterState.selected.push(sorterState.items[i]);
 
     const orderContainer = document.getElementById('sorter-order');
-    orderContainer.innerHTML = sorterState.selected.map(s => `<span class="sorted-tag">${s} cm</span>`).join('');
+    orderContainer.innerHTML = sorterState.selected.map(s => `<span class="sorted-tag">${s.size} cm</span>`).join('');
 
     if (sorterState.selected.length === sorterState.items.length) {
         document.getElementById('sorter-check').style.display = 'inline-block';
@@ -558,25 +680,28 @@ function selectSorterItem(i) {
 }
 
 function checkSorter() {
-    const correct = JSON.stringify(sorterState.selected) === JSON.stringify(sorterState.correct);
+    const selectedSizes = sorterState.selected.map(s => s.size);
+    const correctSizes = sorterState.correct.map(s => s.size);
+    const isCorrect = JSON.stringify(selectedSizes) === JSON.stringify(correctSizes);
+    
     document.getElementById('sorter-game').style.display = 'none';
     document.getElementById('sorter-result').style.display = 'block';
 
-    const xp = correct ? 80 : 20;
-    document.getElementById('sorter-result-title').textContent = correct
+    const xp = isCorrect ? 80 : 20;
+    document.getElementById('sorter-result-title').textContent = isCorrect
         ? 'Perfetto! Conosci le dimensioni a perfezione! 💋'
-        : 'Non esattamente... L\'ordine corretto era: ' + sorterState.correct.map(s => s + 'cm').join(' → ');
-    document.getElementById('sorter-result-text').textContent = correct
+        : 'Non esattamente... L\'ordine corretto era: ' + correctSizes.map(s => s + 'cm').join(' → ');
+    document.getElementById('sorter-result-text').textContent = isCorrect
         ? 'I tuoi occhi sanno valutare perfettamente. Sei un\'esperta.'
         : 'Hai bisogno di più pratica. Continua a studiare! 👀';
-    document.getElementById('sorter-xp').textContent = `+${xp} XP`;
+    document.getElementById('sorter-xp').textContent = '+' + xp + ' XP';
 
     profile.gamesPlayed++;
-    addDNA('devotion', correct ? 5 : 1);
+    addDNA('devotion', isCorrect ? 5 : 1);
     addXP(xp, 'Size Sorter');
 }
 
-// ============ GAME 5: MANTRA TYPER ============
+// ============ GAME 5: MANTRA TYPER (CON SFONDO) ============
 let mantraState = { timer: null, timeLeft: 60, score: 0, completed: 0, currentMantra: '' };
 
 const MANTRAS = [
@@ -607,6 +732,15 @@ function startMantra() {
     document.getElementById('mantra-result').style.display = 'none';
     document.getElementById('mantra-game').style.display = 'block';
 
+    // Sfondo casuale
+    const bgImg = IMAGES.mantra[Math.floor(Math.random() * IMAGES.mantra.length)];
+    const gameArea = document.getElementById('mantra-game');
+    gameArea.style.backgroundImage = 'url(' + bgImg + ')';
+    gameArea.style.backgroundSize = 'cover';
+    gameArea.style.backgroundPosition = 'center';
+    gameArea.style.borderRadius = '16px';
+    gameArea.style.padding = '30px';
+
     mantraState = { timer: null, timeLeft: 60, score: 0, completed: 0, currentMantra: '' };
     nextMantra();
 
@@ -617,14 +751,14 @@ function startMantra() {
 
     mantraState.timer = setInterval(() => {
         mantraState.timeLeft--;
-        document.getElementById('mantra-timer').textContent = `Tempo: ${mantraState.timeLeft}s`;
+        document.getElementById('mantra-timer').textContent = 'Tempo: ' + mantraState.timeLeft + 's';
         if (mantraState.timeLeft <= 0) endMantra();
     }, 1000);
 }
 
 function nextMantra() {
     mantraState.currentMantra = MANTRAS[Math.floor(Math.random() * MANTRAS.length)];
-    document.getElementById('mantra-target').textContent = `"${mantraState.currentMantra}"`;
+    document.getElementById('mantra-target').textContent = '"' + mantraState.currentMantra + '"';
     document.getElementById('mantra-input').value = '';
 }
 
@@ -636,7 +770,7 @@ function checkMantraInput() {
         mantraState.completed++;
         mantraState.score += 100;
         document.getElementById('mantra-completed').textContent = mantraState.completed;
-        document.getElementById('mantra-score').textContent = `Score: ${mantraState.score}`;
+        document.getElementById('mantra-score').textContent = 'Score: ' + mantraState.score;
 
         const feedback = document.getElementById('mantra-feedback');
         const msgs = ['Good girl! 💋', 'Brava! 💕', 'Feel it becoming true... 🌀', 'You believe it now. 👑', 'Deeper and deeper... 💜'];
@@ -650,12 +784,13 @@ function checkMantraInput() {
 function endMantra() {
     clearInterval(mantraState.timer);
     document.getElementById('mantra-game').style.display = 'none';
+    document.getElementById('mantra-game').style.backgroundImage = 'none';
     document.getElementById('mantra-result').style.display = 'block';
 
     const xp = mantraState.completed * 25;
     document.getElementById('mantra-result-text').textContent =
-        `Hai scritto ${mantraState.completed} mantra in 60 secondi. Score: ${mantraState.score}`;
-    document.getElementById('mantra-xp').textContent = `+${xp} XP`;
+        'Hai scritto ' + mantraState.completed + ' mantra in 60 secondi. Score: ' + mantraState.score;
+    document.getElementById('mantra-xp').textContent = '+' + xp + ' XP';
 
     profile.gamesPlayed++;
     addDNA('submission', mantraState.completed);
@@ -664,7 +799,7 @@ function endMantra() {
     addXP(xp, 'Mantra Typer');
 }
 
-// ============ GAME 6: GAZE LOCK ============
+// ============ GAME 6: GAZE LOCK (CON IMMAGINI) ============
 let gazeState = { running: false, timer: 0, interval: null, confirmTimeout: null, failed: false };
 
 const GAZE_AFFIRMATIONS = [
@@ -685,22 +820,45 @@ function startGaze() {
 
     gazeState = { running: true, timer: 0, interval: null, confirmTimeout: null, failed: false };
 
+    // Mostra immagine casuale nel centro
+    const randomImg = IMAGES.gaze[Math.floor(Math.random() * IMAGES.gaze.length)];
+    const gazeCenter = document.getElementById('gaze-center');
+    gazeCenter.innerHTML = `
+        <img src="${randomImg}" style="width:250px;height:250px;object-fit:cover;border-radius:50%;border:3px solid #ff69b4;animation:gazePulse 3s ease-in-out infinite;" onerror="this.outerHTML='<div class=\\'gaze-symbol\\'>👑</div>'">
+        <div class="gaze-text" id="gaze-affirmation"></div>
+    `;
+
+    // Cambia immagine ogni 20 secondi
+    let imgChangeCounter = 0;
+
     gazeState.interval = setInterval(() => {
         gazeState.timer++;
         const min = Math.floor(gazeState.timer / 60);
         const sec = gazeState.timer % 60;
-        document.getElementById('gaze-timer').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+        document.getElementById('gaze-timer').textContent = min + ':' + sec.toString().padStart(2, '0');
 
-        // Change affirmation every 5 seconds
+        // Cambia affirmation ogni 5 secondi
         if (gazeState.timer % 5 === 0) {
             const aff = GAZE_AFFIRMATIONS[Math.floor(Math.random() * GAZE_AFFIRMATIONS.length)];
             const el = document.getElementById('gaze-affirmation');
-            el.style.opacity = 0;
-            setTimeout(() => { el.textContent = aff; el.style.opacity = 0.7; }, 500);
+            if (el) {
+                el.style.opacity = 0;
+                setTimeout(() => { el.textContent = aff; el.style.opacity = 0.7; }, 500);
+            }
         }
 
-        // Show confirm button every 15-30 seconds
-        if (gazeState.timer % (15 + Math.floor(Math.random() * 15)) === 0) {
+        // Cambia immagine ogni 20 secondi
+        if (gazeState.timer % 20 === 0) {
+            const newImg = IMAGES.gaze[Math.floor(Math.random() * IMAGES.gaze.length)];
+            const imgEl = gazeCenter.querySelector('img');
+            if (imgEl) {
+                imgEl.style.opacity = 0;
+                setTimeout(() => { imgEl.src = newImg; imgEl.style.opacity = 1; }, 500);
+            }
+        }
+
+        // Mostra confirm button ogni 15-30 secondi
+        if (gazeState.timer > 0 && gazeState.timer % (15 + Math.floor(Math.random() * 15)) === 0) {
             showGazeConfirm();
         }
     }, 1000);
@@ -749,7 +907,7 @@ function endGaze() {
 
     document.getElementById('gaze-result-title').textContent = title;
     document.getElementById('gaze-result-text').textContent = text;
-    document.getElementById('gaze-xp').textContent = `+${xp} XP`;
+    document.getElementById('gaze-xp').textContent = '+' + xp + ' XP';
 
     profile.gamesPlayed++;
     addDNA('devotion', Math.floor(gazeState.timer / 10));
@@ -758,7 +916,7 @@ function endGaze() {
     addXP(xp, 'Gaze Lock');
 }
 
-// ============ BEHAVIORAL SESSIONS ============
+// ============ BEHAVIORAL SESSIONS (CON IMMAGINI) ============
 const SESSIONS = {
     1: {
         title: "First Gaze",
@@ -846,6 +1004,18 @@ function startSession(id) {
     showPage('session-player');
     sessionState = { running: true, sessionId: id, lineIndex: 0, timeout: null };
 
+    // Sfondo immagine della sessione
+    const bg = document.getElementById('session-bg');
+    const bgImg = IMAGES.sessions[id];
+    if (bgImg) {
+        bg.style.backgroundImage = 'url(' + bgImg + ')';
+        bg.style.backgroundSize = 'cover';
+        bg.style.backgroundPosition = 'center';
+        bg.style.filter = 'blur(3px) brightness(0.3)';
+    } else {
+        bg.style.backgroundImage = 'none';
+    }
+
     document.getElementById('session-text').textContent = '';
     document.getElementById('session-text').classList.remove('visible');
     document.getElementById('session-bar').style.width = '0%';
@@ -904,7 +1074,6 @@ function init() {
     updateAllUI();
     checkAchievements();
 
-    // Start time tracking
     setInterval(() => {
         profile.totalTime++;
         if (profile.totalTime % 60 === 0) DB.set('profile', profile);
