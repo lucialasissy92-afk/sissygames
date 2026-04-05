@@ -3,483 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sissy Games — Train Your Mind</title>
+    <title>💋 SissyGames</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="nav-brand" onclick="showPage('home')">💋 SissyGames</div>
-        <div class="nav-links">
-            <a onclick="showPage('home')">Home</a>
-            <a onclick="showPage('games')">Giochi</a>
-            <a onclick="showPage('sessions')">Sessions</a>
-            <a onclick="showPage('profile')">Profilo</a>
-        </div>
-    </nav>
 
-    <!-- HOME PAGE -->
-    <div id="page-home" class="page active">
-        <div class="hero">
-            <h1>Benvenuta, <span id="hero-name">Sissy</span></h1>
-            <p class="hero-sub">Il tuo viaggio di trasformazione inizia qui</p>
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-num" id="home-streak">0</div>
-                    <div class="stat-label">Giorni Streak</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-num" id="home-xp">0</div>
-                    <div class="stat-label">XP Totali</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-num" id="home-level">1</div>
-                    <div class="stat-label">Livello</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-num" id="home-games">0</div>
-                    <div class="stat-label">Giochi Giocati</div>
-                </div>
-            </div>
-            <button class="btn-primary" onclick="showPage('games')">Inizia a Giocare 💕</button>
-        </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-brand" onclick="showPage('home')">💋 SissyGames</div>
+    <div class="nav-links">
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('games')">Giochi</a>
+        <a onclick="showPage('sessions')">Sessions</a>
+        <a onclick="showPage('profile')">Profilo</a>
+    </div>
+</nav>
 
-        <!-- Daily Check-in -->
-        <div class="section" id="checkin-section">
-            <h2>✨ Check-in Giornaliero</h2>
-            <p>Rispondi per guadagnare XP bonus</p>
-            <div id="checkin-form">
-                <div class="checkin-q">
-                    <label>Come ti senti oggi?</label>
-                    <div class="emoji-select">
-                        <span onclick="selectMood(this, 'shy')" class="emoji-opt">😳 Timida</span>
-                        <span onclick="selectMood(this, 'eager')" class="emoji-opt">😍 Vogliosa</span>
-                        <span onclick="selectMood(this, 'submissive')" class="emoji-opt">🥺 Sottomessa</span>
-                        <span onclick="selectMood(this, 'girly')" class="emoji-opt">💃 Femminile</span>
-                    </div>
-                </div>
-                <div class="checkin-q">
-                    <label>Indossi qualcosa di femminile adesso?</label>
-                    <div class="emoji-select">
-                        <span onclick="selectWear(this, 'yes')" class="emoji-opt">👙 Sì</span>
-                        <span onclick="selectWear(this, 'no')" class="emoji-opt">👖 No</span>
-                    </div>
-                </div>
-                <button class="btn-primary" onclick="submitCheckin()">Completa Check-in (+50 XP)</button>
-            </div>
-            <div id="checkin-done" style="display:none">
-                <p class="success-msg">✅ Check-in completato! Torna domani 💋</p>
-            </div>
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+    <div class="hero">
+        <h1>Benvenuta, <span id="hero-name">Sissy</span> 💕</h1>
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-num" id="home-streak">0</div><div class="stat-label">🔥 Streak</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-xp">0</div><div class="stat-label">✨ XP</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-level">1</div><div class="stat-label">⭐ Livello</div></div>
+            <div class="stat-card"><div class="stat-num" id="home-games">0</div><div class="stat-label">🎮 Giochi</div></div>
         </div>
     </div>
 
-    <!-- GAMES PAGE -->
-    <div id="page-games" class="page">
-        <h1 class="page-title">🎮 Giochi</h1>
-        <p class="page-desc">Ogni gioco allena la tua mente. Gioca ogni giorno per progredire.</p>
-        
-        <div class="games-grid">
-            <div class="game-card" onclick="showPage('game-memory')">
-                <div class="game-icon">🃏</div>
-                <h3>Cock Memory</h3>
-                <p>Trova le coppie. Allena lo sguardo e la memoria.</p>
-                <div class="game-diff">⭐ Facile</div>
+    <div class="card">
+        <h2>📝 Check-in Giornaliero</h2>
+        <div id="checkin-form">
+            <p>Come ti senti oggi?</p>
+            <div class="emoji-row">
+                <span class="emoji-opt" onclick="selectMood(this,'submissive')">🥺 Sottomessa</span>
+                <span class="emoji-opt" onclick="selectMood(this,'curious')">🤔 Curiosa</span>
+                <span class="emoji-opt" onclick="selectMood(this,'horny')">🥵 Eccitata</span>
+                <span class="emoji-opt" onclick="selectMood(this,'feminine')">💃 Femminile</span>
             </div>
-            
-            <div class="game-card" onclick="showPage('game-reaction')">
-                <div class="game-icon">⚡</div>
-                <h3>Reflex Kneel</h3>
-                <p>Reagisci il più velocemente possibile. Allena l'istinto.</p>
-                <div class="game-diff">⭐⭐ Medio</div>
+            <p>Indossi qualcosa di femminile?</p>
+            <div class="emoji-row">
+                <span class="emoji-opt" onclick="selectWear(this,'yes')">👙 Sì!</span>
+                <span class="emoji-opt" onclick="selectWear(this,'no')">👖 Non ancora</span>
             </div>
-            
-            <div class="game-card" onclick="showPage('game-catcher')">
-                <div class="game-icon">👅</div>
-                <h3>Cock Catcher</h3>
-                <p>Cattura tutto quello che cade. Non farne scappare nessuno.</p>
-                <div class="game-diff">⭐⭐ Medio</div>
-            </div>
-
-            <div class="game-card" onclick="showPage('game-sorter')">
-                <div class="game-icon">📏</div>
-                <h3>Size Sorter</h3>
-                <p>Ordina per dimensione. Dimostra la tua esperienza.</p>
-                <div class="game-diff">⭐ Facile</div>
-            </div>
-
-            <div class="game-card" onclick="showPage('game-worship')">
-                <div class="game-icon">⌨️</div>
-                <h3>Mantra Typer</h3>
-                <p>Scrivi i mantra il più velocemente possibile.</p>
-                <div class="game-diff">⭐⭐ Medio</div>
-            </div>
-
-            <div class="game-card" onclick="showPage('game-gazelock')">
-                <div class="game-icon">👁️</div>
-                <h3>Gaze Lock</h3>
-                <p>Mantieni lo sguardo fisso. Non distogliere gli occhi.</p>
-                <div class="game-diff">⭐⭐⭐ Hard</div>
-            </div>
+            <button class="btn" onclick="submitCheckin()">Conferma Check-in 💋</button>
+        </div>
+        <div id="checkin-done" style="display:none;">
+            <p>✅ Check-in completato! Torna domani 💕</p>
         </div>
     </div>
 
-    <!-- SESSIONS PAGE -->
-    <div id="page-sessions" class="page">
-        <h1 class="page-title">🧠 Behavioral Sessions</h1>
-        <p class="page-desc">Sessioni guidate di modifica comportamentale. Trova un posto tranquillo e privato.</p>
-        
-        <div class="sessions-grid">
-            <div class="session-card" onclick="startSession(1)">
-                <div class="session-num">01</div>
-                <h3>First Gaze</h3>
-                <p>Introduzione al cock worship. Impara a guardare.</p>
-                <div class="session-dur">🕐 8 minuti</div>
-            </div>
-            <div class="session-card" onclick="startSession(2)">
-                <div class="session-num">02</div>
-                <h3>Size Acceptance</h3>
-                <p>Abbraccia la tua inferiorità. Trova la pace.</p>
-                <div class="session-dur">🕐 10 minuti</div>
-            </div>
-            <div class="session-card" onclick="startSession(3)">
-                <div class="session-num">03</div>
-                <h3>Surrender</h3>
-                <p>Impara ad arrenderti completamente.</p>
-                <div class="session-dur">🕐 10 minuti</div>
-            </div>
-            <div class="session-card locked" onclick="showUpgrade()">
-                <div class="session-num">🔒</div>
-                <h3>Oral Meditation</h3>
-                <p>Sblocca con il livello 5</p>
-                <div class="session-dur">Livello 5 richiesto</div>
-            </div>
-            <div class="session-card locked" onclick="showUpgrade()">
-                <div class="session-num">🔒</div>
-                <h3>Rewiring Touch</h3>
-                <p>Sblocca con il livello 8</p>
-                <div class="session-dur">Livello 8 richiesto</div>
-            </div>
-            <div class="session-card locked" onclick="showUpgrade()">
-                <div class="session-num">🔒</div>
-                <h3>Point of No Return</h3>
-                <p>Sblocca con il livello 15</p>
-                <div class="session-dur">Livello 15 richiesto</div>
-            </div>
+    <button class="btn btn-large" onclick="showPage('games')">Inizia a Giocare 💕</button>
+</div>
+
+<!-- GAMES LIST -->
+<div id="page-games" class="page">
+    <h1>🎮 Giochi</h1>
+    <div class="game-grid">
+        <div class="game-card" onclick="showPage('memory')">
+            <div class="game-icon">🃏</div>
+            <h3>Cock Memory</h3>
+            <p>Trova le coppie nascoste</p>
+        </div>
+        <div class="game-card" onclick="showPage('reaction')">
+            <div class="game-icon">⚡</div>
+            <h3>Reflex Kneel</h3>
+            <p>Testa i tuoi riflessi</p>
+        </div>
+        <div class="game-card" onclick="showPage('catcher')">
+            <div class="game-icon">👅</div>
+            <h3>Cock Catcher</h3>
+            <p>Cattura tutto con la bocca</p>
+        </div>
+        <div class="game-card" onclick="showPage('sorter')">
+            <div class="game-icon">📏</div>
+            <h3>Size Sorter</h3>
+            <p>Ordina per dimensione</p>
+        </div>
+        <div class="game-card" onclick="showPage('mantra')">
+            <div class="game-icon">⌨️</div>
+            <h3>Mantra Typer</h3>
+            <p>Scrivi i tuoi mantra</p>
+        </div>
+        <div class="game-card" onclick="showPage('gaze')">
+            <div class="game-icon">👁️</div>
+            <h3>Gaze Lock</h3>
+            <p>Mantieni lo sguardo fisso</p>
+        </div>
+        <div class="game-card" onclick="showPage('quiz')">
+            <div class="game-icon">🧠</div>
+            <h3>Cock Quiz</h3>
+            <p>Quanto ne sai davvero?</p>
+        </div>
+        <div class="game-card" onclick="showPage('sizeguess')">
+            <div class="game-icon">📐</div>
+            <h3>Size Guess</h3>
+            <p>Indovina la taglia dalla descrizione</p>
+        </div>
+        <div class="game-card" onclick="showPage('alphaprofile')">
+            <div class="game-icon">👑</div>
+            <h3>Alpha Profile</h3>
+            <p>Studia e adora i profili alpha</p>
+        </div>
+        <div class="game-card" onclick="showPage('confession')">
+            <div class="game-icon">💋</div>
+            <h3>Cock Confession</h3>
+            <p>Confessa i tuoi desideri più profondi</p>
+        </div>
+        <div class="game-card" onclick="showPage('worship')">
+            <div class="game-icon">🔤</div>
+            <h3>Worship Words</h3>
+            <p>Completa le frasi di adorazione</p>
         </div>
     </div>
+</div>
 
-    <!-- PROFILE PAGE -->
-    <div id="page-profile" class="page">
-        <h1 class="page-title">👤 Il Tuo Profilo</h1>
-        
-        <div class="profile-setup" id="profile-setup">
-            <h2>Crea il tuo profilo sissy</h2>
-            <div class="form-group">
-                <label>Il tuo nome sissy:</label>
-                <input type="text" id="sissy-name-input" placeholder="Come vuoi essere chiamata?" class="input-field">
-            </div>
-            <button class="btn-primary" onclick="saveProfile()">Salva 💕</button>
-        </div>
-
-        <div class="profile-view" id="profile-view" style="display:none">
-            <div class="profile-header">
-                <div class="profile-avatar">💋</div>
-                <h2 id="profile-name">Sissy</h2>
-                <div class="profile-title" id="profile-title">Curious</div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="profile-stat">
-                    <h3>Sissy DNA</h3>
-                    <div class="dna-bar">
-                        <div class="dna-row">
-                            <span>Cock Devotion</span>
-                            <div class="bar"><div class="bar-fill" id="bar-devotion"></div></div>
-                            <span id="val-devotion">0</span>
-                        </div>
-                        <div class="dna-row">
-                            <span>Femininity</span>
-                            <div class="bar"><div class="bar-fill" id="bar-femininity"></div></div>
-                            <span id="val-femininity">0</span>
-                        </div>
-                        <div class="dna-row">
-                            <span>Obedience</span>
-                            <div class="bar"><div class="bar-fill" id="bar-obedience"></div></div>
-                            <span id="val-obedience">0</span>
-                        </div>
-                        <div class="dna-row">
-                            <span>Submission</span>
-                            <div class="bar"><div class="bar-fill" id="bar-submission"></div></div>
-                            <span id="val-submission">0</span>
-                        </div>
-                        <div class="dna-row">
-                            <span>Addiction</span>
-                            <div class="bar"><div class="bar-fill" id="bar-addiction"></div></div>
-                            <span id="val-addiction">0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="profile-stat">
-                    <h3>Statistiche</h3>
-                    <div class="stat-list">
-                        <div class="stat-item"><span>XP Totali</span><span id="stat-xp">0</span></div>
-                        <div class="stat-item"><span>Livello</span><span id="stat-level">1</span></div>
-                        <div class="stat-item"><span>Giochi Giocati</span><span id="stat-games">0</span></div>
-                        <div class="stat-item"><span>Sessioni Completate</span><span id="stat-sessions">0</span></div>
-                        <div class="stat-item"><span>Streak Attuale</span><span id="stat-streak">0</span></div>
-                        <div class="stat-item"><span>Streak Record</span><span id="stat-best-streak">0</span></div>
-                        <div class="stat-item"><span>Tempo Giocato</span><span id="stat-time">0 min</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>🏆 Achievement</h3>
-                <div class="achievements" id="achievements-list">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-
-            <div class="section">
-                <h3>📔 Diario</h3>
-                <div id="diary-entries">
-                    <!-- Filled by JS -->
-                </div>
-            </div>
-        </div>
+<!-- COCK MEMORY -->
+<div id="page-memory" class="page">
+    <h1>🃏 Cock Memory</h1>
+    <div id="memory-difficulty" class="card">
+        <h3>Scegli la difficoltà:</h3>
+        <button class="btn" onclick="startMemory(4)">4×4 Facile (8 coppie)</button>
+        <button class="btn" onclick="startMemory(6)">6×6 Medio (18 coppie)</button>
+        <button class="btn" onclick="startMemory(8)">8×8 Difficile (32 coppie)</button>
     </div>
-
-    <!-- ===================== -->
-    <!--   GAME: COCK MEMORY   -->
-    <!-- ===================== -->
-    <div id="page-game-memory" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>🃏 Cock Memory</h2>
-            <div class="game-info">
-                <span id="memory-moves">Mosse: 0</span>
-                <span id="memory-timer">Tempo: 0s</span>
-                <span id="memory-pairs">Coppie: 0/0</span>
-            </div>
-        </div>
-
-        <div class="game-area">
-            <div id="memory-difficulty" class="difficulty-select">
-                <h3>Scegli la difficoltà</h3>
-                <button class="btn-diff" onclick="startMemory(4)">Facile (4x4)</button>
-                <button class="btn-diff" onclick="startMemory(6)">Medio (6x6)</button>
-                <button class="btn-diff" onclick="startMemory(8)">Hard (8x8)</button>
-            </div>
-            <div id="memory-board" class="memory-grid"></div>
-            <div id="memory-result" class="game-result" style="display:none">
-                <h2 id="memory-result-title">Complimenti! 💋</h2>
-                <p id="memory-result-text"></p>
-                <div id="memory-result-xp" class="xp-earned"></div>
-                <button class="btn-primary" onclick="resetMemory()">Gioca Ancora</button>
-            </div>
-        </div>
-
-        <div class="game-message" id="memory-msg"></div>
+    <div class="game-stats">
+        <span id="memory-moves">Mosse: 0</span>
+        <span id="memory-pairs">Coppie: 0/0</span>
+        <span id="memory-timer">Tempo: 0s</span>
     </div>
-
-    <!-- ===================== -->
-    <!--  GAME: REFLEX KNEEL   -->
-    <!-- ===================== -->
-    <div id="page-game-reaction" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>⚡ Reflex Kneel</h2>
-        </div>
-
-        <div class="game-area">
-            <div id="reaction-start" class="centered-content">
-                <h3>Quando appare l'immagine, clicca il più velocemente possibile!</h3>
-                <p>Più sei veloce, più sei obbediente.</p>
-                <button class="btn-primary" onclick="startReaction()">Inizia ⚡</button>
-            </div>
-            <div id="reaction-wait" style="display:none" class="reaction-screen waiting">
-                <h2>Aspetta...</h2>
-                <p>Preparati ad inginocchiarti</p>
-            </div>
-            <div id="reaction-go" style="display:none" class="reaction-screen go" onclick="clickReaction()">
-                <h1>👑 KNEEL! 👑</h1>
-                <p>CLICCA ORA!</p>
-            </div>
-            <div id="reaction-result" style="display:none" class="centered-content">
-                <h2 id="reaction-time-text"></h2>
-                <p id="reaction-comment"></p>
-                <div id="reaction-xp" class="xp-earned"></div>
-                <div id="reaction-history" class="reaction-history"></div>
-                <button class="btn-primary" onclick="startReaction()">Riprova</button>
-                <button class="btn-secondary" onclick="showPage('games')">Fine</button>
-            </div>
-            <div id="reaction-early" style="display:none" class="centered-content">
-                <h2>Troppo presto! 😤</h2>
-                <p>Una brava sissy aspetta il comando prima di agire.</p>
-                <button class="btn-primary" onclick="startReaction()">Riprova</button>
-            </div>
-        </div>
+    <p id="memory-msg" class="game-msg"></p>
+    <div id="memory-board" class="memory-grid"></div>
+    <div id="memory-result" class="card result-card" style="display:none;">
+        <h2 id="memory-result-title"></h2>
+        <p id="memory-result-text"></p>
+        <p class="xp-text" id="memory-result-xp"></p>
+        <button class="btn" onclick="resetMemory()">Gioca Ancora</button>
     </div>
+    <button class="btn btn-secondary" onclick="resetMemory();showPage('games')">← Torna ai Giochi</button>
+</div>
 
-    <!-- ===================== -->
-    <!--  GAME: COCK CATCHER   -->
-    <!-- ===================== -->
-    <div id="page-game-catcher" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>👅 Cock Catcher</h2>
-            <div class="game-info">
-                <span id="catcher-score">Score: 0</span>
-                <span id="catcher-combo">Combo: 0</span>
-                <span id="catcher-timer">Tempo: 60s</span>
-            </div>
-        </div>
-
-        <div class="game-area">
-            <div id="catcher-start" class="centered-content">
-                <h3>Cattura i 🍆 che cadono! Evita i ❌!</h3>
-                <p>Muovi il mouse o tocca per spostare la bocca.</p>
-                <button class="btn-primary" onclick="startCatcher()">Gioca! 👅</button>
-            </div>
-            <canvas id="catcher-canvas" width="400" height="600" style="display:none"></canvas>
-            <div id="catcher-result" style="display:none" class="centered-content">
-                <h2>Tempo scaduto! 💋</h2>
-                <p id="catcher-result-text"></p>
-                <div id="catcher-xp" class="xp-earned"></div>
-                <button class="btn-primary" onclick="startCatcher()">Rigioca</button>
-            </div>
-        </div>
+<!-- REFLEX KNEEL -->
+<div id="page-reaction" class="page">
+    <h1>⚡ Reflex Kneel</h1>
+    <div id="reaction-start" class="card">
+        <p>Quando vedi 👑 KNEEL 👑 — clicca più veloce che puoi!</p>
+        <button class="btn" onclick="startReaction()">Inizia!</button>
     </div>
-
-    <!-- ===================== -->
-    <!--   GAME: SIZE SORTER   -->
-    <!-- ===================== -->
-    <div id="page-game-sorter" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>📏 Size Sorter</h2>
-        </div>
-
-        <div class="game-area">
-            <div id="sorter-intro" class="centered-content">
-                <h3>Ordina dal più piccolo al più grande!</h3>
-                <p>Trascina gli elementi nell'ordine corretto.</p>
-                <button class="btn-primary" onclick="startSorter()">Inizia 📏</button>
-            </div>
-            <div id="sorter-game" style="display:none">
-                <p class="sort-instruction">Clicca nell'ordine corretto: dal più piccolo al più grande</p>
-                <div id="sorter-items" class="sorter-grid"></div>
-                <div id="sorter-selected" class="sorter-selected">
-                    <p>Il tuo ordine:</p>
-                    <div id="sorter-order"></div>
-                </div>
-                <button class="btn-primary" onclick="checkSorter()" id="sorter-check" style="display:none">Conferma ✓</button>
-            </div>
-            <div id="sorter-result" style="display:none" class="centered-content">
-                <h2 id="sorter-result-title"></h2>
-                <p id="sorter-result-text"></p>
-                <div id="sorter-xp" class="xp-earned"></div>
-                <button class="btn-primary" onclick="startSorter()">Prossimo Round</button>
-            </div>
-        </div>
+    <div id="reaction-wait" class="reaction-screen wait" style="display:none;">
+        <h2>⏳ Aspetta...</h2>
+        <p>Non cliccare ancora!</p>
     </div>
-
-    <!-- ===================== -->
-    <!--  GAME: MANTRA TYPER   -->
-    <!-- ===================== -->
-    <div id="page-game-worship" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>⌨️ Mantra Typer</h2>
-            <div class="game-info">
-                <span id="mantra-score">Score: 0</span>
-                <span id="mantra-timer">Tempo: 60s</span>
-            </div>
-        </div>
-
-        <div class="game-area">
-            <div id="mantra-start" class="centered-content">
-                <h3>Scrivi i mantra il più velocemente possibile!</h3>
-                <p>Copia esattamente il testo mostrato. Velocità + precisione = punti.</p>
-                <button class="btn-primary" onclick="startMantra()">Inizia ⌨️</button>
-            </div>
-            <div id="mantra-game" style="display:none">
-                <div class="mantra-display" id="mantra-target"></div>
-                <input type="text" id="mantra-input" class="mantra-input" placeholder="Scrivi qui..." autocomplete="off">
-                <div class="mantra-feedback" id="mantra-feedback"></div>
-                <div class="mantra-count">Mantra completati: <span id="mantra-completed">0</span></div>
-            </div>
-            <div id="mantra-result" style="display:none" class="centered-content">
-                <h2>Sessione completata! 💋</h2>
-                <p id="mantra-result-text"></p>
-                <div id="mantra-xp" class="xp-earned"></div>
-                <button class="btn-primary" onclick="startMantra()">Ancora</button>
-            </div>
-        </div>
+    <div id="reaction-go" class="reaction-screen go" style="display:none;" onclick="clickReaction()">
+        <h1>👑 KNEEL! 👑</h1>
+        <p>CLICCA ORA!</p>
     </div>
-
-    <!-- ===================== -->
-    <!--   GAME: GAZE LOCK    -->
-    <!-- ===================== -->
-    <div id="page-game-gazelock" class="page">
-        <div class="game-header">
-            <button class="btn-back" onclick="showPage('games')">← Indietro</button>
-            <h2>👁️ Gaze Lock</h2>
-        </div>
-
-        <div class="game-area">
-            <div id="gaze-start" class="centered-content">
-                <h3>Mantieni lo sguardo fisso sul centro.</h3>
-                <p>Clicca il pulsante che appare entro 3 secondi per dimostrare che stai guardando. NON distrarti.</p>
-                <button class="btn-primary" onclick="startGaze()">Inizia 👁️</button>
-            </div>
-            <div id="gaze-game" style="display:none" class="gaze-screen">
-                <div class="gaze-center" id="gaze-center">
-                    <div class="gaze-symbol">👑</div>
-                    <div class="gaze-text" id="gaze-affirmation"></div>
-                </div>
-                <div class="gaze-timer" id="gaze-timer">0:00</div>
-                <button class="gaze-confirm" id="gaze-btn" style="display:none" onclick="gazeConfirm()">Sono qui 👁️</button>
-                <div class="gaze-distractors" id="gaze-distractors"></div>
-            </div>
-            <div id="gaze-result" style="display:none" class="centered-content">
-                <h2 id="gaze-result-title"></h2>
-                <p id="gaze-result-text"></p>
-                <div id="gaze-xp" class="xp-earned"></div>
-                <button class="btn-primary" onclick="startGaze()">Riprova</button>
-            </div>
-        </div>
+    <div id="reaction-early" class="card" style="display:none;">
+        <h2>Troppo presto! 😤</h2>
+        <p>Una buona sissy sa aspettare il comando!</p>
+        <button class="btn" onclick="startReaction()">Riprova</button>
     </div>
-
-    <!-- ===================== -->
-    <!--    BM SESSION PLAYER  -->
-    <!-- ===================== -->
-    <div id="page-session-player" class="page">
-        <div id="session-screen" class="session-player">
-            <div class="session-bg" id="session-bg"></div>
-            <div class="session-text" id="session-text"></div>
-            <div class="session-progress">
-                <div class="session-bar" id="session-bar"></div>
-            </div>
-            <button class="session-exit" onclick="exitSession()">✕ Esci</button>
-        </div>
+    <div id="reaction-result" class="card" style="display:none;">
+        <h2>⏱️ <span id="reaction-time-text"></span></h2>
+        <p id="reaction-comment"></p>
+        <p class="xp-text" id="reaction-xp"></p>
+        <p id="reaction-history" class="small-text"></p>
+        <button class="btn" onclick="startReaction()">Riprova</button>
     </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
 
-    <!-- NOTIFICATION TOAST -->
-    <div class="toast" id="toast"></div>
-
-    <!-- UPGRADE MODAL -->
-    <div class="modal" id="upgrade-modal" style="display:none" onclick="this.style.display='none'">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h2>🔒 Contenuto Bloccato</h2>
-            <p>Continua a giocare per salire di livello e sbloccare nuove sessioni!</p>
-            <p>Il tuo livello attuale: <strong id="modal-level">1</strong></p>
-            <button class="btn-primary" onclick="document.getElementById('upgrade-modal').style.display='none'">OK</button>
-        </div>
+<!-- COCK CATCHER -->
+<div id="page-catcher" class="page">
+    <h1>👅 Cock Catcher</h1>
+    <div id="catcher-start" class="card">
+        <p>Muovi la bocca 👄 per catturare i 🍆 e evita le ❌!</p>
+        <button class="btn" onclick="startCatcher()">Gioca!</button>
     </div>
+    <div class="game-stats">
+        <span id="catcher-score">Score: 0</span>
+        <span id="catcher-combo">Combo: 0</span>
+        <span id="catcher-timer">Tempo: 60s</span>
+    </div>
+    <canvas id="catcher-canvas" width="400" height="500" style="display:none;max-width:100%;border-radius:16px;background:#1a0015;"></canvas>
+    <div id="catcher-result" class="card" style="display:none;">
+        <h2>Risultato 👅</h2>
+        <p id="catcher-result-text"></p>
+        <p class="xp-text" id="catcher-xp"></p>
+        <button class="btn" onclick="startCatcher()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
 
-    <script src="app.js"></script>
-</body>
-</html>
+<!-- SIZE SORTER -->
+<div id="page-sorter" class="page">
+    <h1>📏 Size Sorter</h1>
+    <div id="sorter-intro" class="card">
+        <p>Ordina i cazzi dal più piccolo al più grande. Clicca nell'ordine corretto!</p>
+        <button class="btn" onclick="startSorter()">Inizia!</button>
+    </div>
+    <div id="sorter-game" style="display:none;">
+        <p>Clicca in ordine dal più piccolo al più grande:</p>
+        <div id="sorter-items" class="sorter-grid"></div>
+        <div id="sorter-order" class="sorter-order"></div>
+        <button id="sorter-check" class="btn" style="display:none;" onclick="checkSorter()">Verifica Ordine ✅</button>
+    </div>
+    <div id="sorter-result" class="card" style="display:none;">
+        <h2 id="sorter-result-title"></h2>
+        <p id="sorter-result-text"></p>
+        <p class="xp-text" id="sorter-xp"></p>
+        <button class="btn" onclick="startSorter()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- MANTRA TYPER -->
+<div id="page-mantra" class="page">
+    <h1>⌨️ Mantra Typer</h1>
+    <div id="mantra-start" class="card">
+        <p>Scrivi i mantra il più velocemente possibile! Hai 60 secondi.</p>
+        <button class="btn" onclick="startMantra()">Inizia!</button>
+    </div>
+    <div id="mantra-game" style="display:none;">
+        <div class="game-stats">
+            <span id="mantra-timer">Tempo: 60s</span>
+            <span id="mantra-score">Score: 0</span>
+            <span>Completati: <span id="mantra-completed">0</span></span>
+        </div>
+        <div class="mantra-target" id="mantra-target"></div>
+        <input type="text" id="mantra-input" class="mantra-input" placeholder="Scrivi qui..." autocomplete="off">
+        <p id="mantra-feedback" class="game-msg"></p>
+    </div>
+    <div id="mantra-result" class="card" style="display:none;">
+        <h2>Risultato ⌨️</h2>
+        <p id="mantra-result-text"></p>
+        <p class="xp-text" id="mantra-xp"></p>
+        <button class="btn" onclick="startMantra()">Gioca Ancora</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- GAZE LOCK -->
+<div id="page-gaze" class="page">
+    <h1>👁️ Gaze Lock</h1>
+    <div id="gaze-start" class="card">
+        <p>Fissa lo schermo senza distogliere lo sguardo. Clicca il bottone quando appare per confermare.</p>
+        <button class="btn" onclick="startGaze()">Inizia</button>
+    </div>
+    <div id="gaze-game" class="gaze-screen" style="display:none;">
+        <div id="gaze-center" class="gaze-center">
+            <div class="gaze-symbol">👑</div>
+            <div class="gaze-text" id="gaze-affirmation"></div>
+        </div>
+        <div id="gaze-timer" class="gaze-timer">0:00</div>
+        <button id="gaze-btn" class="btn gaze-confirm" style="display:none;" onclick="gazeConfirm()">👁️ Sto ancora guardando</button>
+    </div>
+    <div id="gaze-result" class="card" style="display:none;">
+        <h2 id="gaze-result-title"></h2>
+        <p id="gaze-result-text"></p>
+        <p class="xp-text" id="gaze-xp"></p>
+        <button class="btn" onclick="startGaze()">Riprova</button>
+    </div>
+    <button class="btn btn-secondary" onclick="showPage('games')">← Torna ai Giochi</button>
+</div>
+
+<!-- ===== NUOVI GIOCHI ===== -->
+
+<!-- COCK QUIZ -->
+<div id="page-quiz" class="page">
+    <h1>🧠 Cock Quiz</h1>
+    <div id="quiz-start" class="card">
+        <p>Quanto ne sai sui cazzi? 10 domande per testare la tua conoscenza!</p>
+        <button class="btn" onclick="startQuiz()">Inizia il Quiz!</button>
+    </div>
+    <div id="quiz-game" style="display:none;">
+        <div class="game-stats">
+            <span id="quiz-progress">Domanda 1/10</span>
+            <span id="quiz-score-display">Score: 0</span>
+        </div>
+        <div class="card" id="quiz-question-card">
+            <h3 id="quiz-category"></h3>
+            <p id="quiz-question"
